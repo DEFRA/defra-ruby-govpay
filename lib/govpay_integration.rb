@@ -6,6 +6,7 @@ require_relative "govpay_integration/object"
 require_relative "govpay_integration/payment"
 require_relative "govpay_integration/refund"
 require_relative "govpay_integration/error"
+require_relative "govpay_integration/api"
 
 
 module GovpayIntegration

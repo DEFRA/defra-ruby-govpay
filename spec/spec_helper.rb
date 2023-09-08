@@ -5,6 +5,7 @@ require "govpay_integration/object"
 require "govpay_integration/payment"
 require "govpay_integration/refund"
 require "govpay_integration/error"
+require "govpay_integration/api"
 require "govpay_integration/version"
 require "support/fixture_helper"
 

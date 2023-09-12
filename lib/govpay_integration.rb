@@ -9,7 +9,6 @@ require_relative "govpay_integration/refund"
 require_relative "govpay_integration/error"
 require_relative "govpay_integration/api"
 
-
 module GovpayIntegration
   class << self
     attr_accessor :configuration

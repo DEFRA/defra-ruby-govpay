@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "rest-client"
 
 module GovpayIntegration
@@ -35,7 +37,7 @@ module GovpayIntegration
         error_message = "Error sending request to govpay (#{method} #{path}, params: #{params}): #{e}"
         puts error_message
         # notify_error(e, method: method, path: path, params: params)
-        raise GovpayApiError.new(error_message)
+        raise GovpayApiError, error_message
       end
     end
 

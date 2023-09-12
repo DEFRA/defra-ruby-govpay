@@ -7,11 +7,10 @@ RSpec.describe GovpayIntegration::API do
   let(:govpay_host) { "https://publicapi.payments.service.gov.uk" }
   let(:config) do
     double(:config,
-      govpay_url: govpay_host,
-      host_is_back_office: false,
-      govpay_front_office_api_token: "front_office_token",
-      govpay_back_office_api_token: "back_office_token"
-    )
+           govpay_url: govpay_host,
+           host_is_back_office: false,
+           govpay_front_office_api_token: "front_office_token",
+           govpay_back_office_api_token: "back_office_token")
   end
   let(:govpay_service) { described_class.new(config) }
 
@@ -44,7 +43,7 @@ RSpec.describe GovpayIntegration::API do
       end
 
       it "sends the moto flag to GovPay" do
-        response = govpay_service.send_request(
+        govpay_service.send_request(
           method: :get,
           path: "/valid_path",
           params: { valid: "params", moto: true },
@@ -62,7 +61,7 @@ RSpec.describe GovpayIntegration::API do
       end
 
       it "does not send the moto flag to GovPay" do
-        response = govpay_service.send_request(
+        govpay_service.send_request(
           method: :get,
           path: "/valid_path",
           params: { valid: "params" },
@@ -82,16 +81,15 @@ RSpec.describe GovpayIntegration::API do
       end
 
       it "raises a GovpayApiError" do
-        expect {
+        expect do
           govpay_service.send_request(
             method: :get,
             path: "/invalid_path",
             params: { invalid: "params" },
             is_moto: false
           )
-        }.to raise_error(GovpayIntegration::GovpayApiError)
+        end.to raise_error(GovpayIntegration::GovpayApiError)
       end
     end
   end
 end
-

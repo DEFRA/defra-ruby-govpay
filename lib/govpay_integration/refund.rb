@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module GovpayIntegration
   class Refund < Object
     def success?

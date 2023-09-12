@@ -8,7 +8,7 @@ module GovpayIntegration
   end
 
   class API
-    def initialize(config)
+    def initialize(config = GovpayIntegration.configuration)
       @config = config
       @is_back_office = config.host_is_back_office
       @front_office_token = config.govpay_front_office_api_token
@@ -32,9 +32,10 @@ module GovpayIntegration
         puts "Received response from Govpay: #{response}"
         response
       rescue StandardError => e
-        puts "Error sending request to govpay (#{method} #{path}, params: #{params}): #{e}"
+        error_message = "Error sending request to govpay (#{method} #{path}, params: #{params}): #{e}"
+        puts error_message
         # notify_error(e, method: method, path: path, params: params)
-        raise GovpayApiError
+        raise GovpayApiError.new(error_message)
       end
     end
 

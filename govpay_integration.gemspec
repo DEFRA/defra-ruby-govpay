@@ -9,7 +9,10 @@ Gem::Specification.new do |spec|
   spec.email = ["jerome.pratt@defra.gov.uk"]
 
   spec.summary = "A Ruby gem facilitating integration with Govpay services in WCR and WEX applications."
-  spec.description = "This gem abstracts the Govpay integration code, enabling seamless and reusable integration within the WCR and WEX applications. It is designed to make few assumptions about the data models of the applications that utilize it, aiming to be as flexible and adaptable as possible."
+  spec.description = "This gem abstracts the Govpay integration code, enabling seamless and reusable " \
+                     "integration within the WCR and WEX applications. It is designed to make few assumptions " \
+                     "about the data models of the applications that utilize it, aiming to be as flexible and " \
+                     "adaptable as possible."
   spec.homepage = "https://yourgemhomepage.com"
   spec.required_ruby_version = ">= 2.6.0"
 

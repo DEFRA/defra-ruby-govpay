@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 module GovpayIntegration
+  # The Payment class represents a payment object in the Govpay Integration.
+  # It contains methods to check refund status and details about the payment.
   class Payment < Object
     def refundable?(amount_requested = 0)
       refund.status == "available" &&

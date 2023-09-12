@@ -3,12 +3,16 @@
 require "rest-client"
 
 module GovpayIntegration
+  # Custom error class to handle Govpay API errors
   class GovpayApiError < StandardError
     def initialize(msg = "Govpay API error")
       super
     end
   end
 
+  # The API class is responsible for making requests to the Govpay API.
+  # It handles the construction of request URLs, headers, and payload,
+  # and also deals with any errors that occur during the API request.
   class API
     def initialize(config = GovpayIntegration.configuration)
       @config = config
@@ -18,30 +22,40 @@ module GovpayIntegration
     end
 
     def send_request(method:, path:, params: nil, is_moto: false)
-      puts "#{self.class} sending #{method} request to govpay (#{path}), " \
-                    "params: #{params}, moto: #{is_moto}"
-      begin
-        response = RestClient::Request.execute(
-          method: method,
-          url: url(path),
-          payload: payload(params),
-          headers: {
-            "Authorization" => "Bearer #{bearer_token(is_moto)}",
-            "Content-Type" => "application/json"
-          }
-        )
+      puts build_log_message(method, path, params, is_moto)
 
+      begin
+        response = execute_request(method, path, params, is_moto)
         puts "Received response from Govpay: #{response}"
         response
-      rescue StandardError => e
-        error_message = "Error sending request to govpay (#{method} #{path}, params: #{params}): #{e}"
-        puts error_message
-        # notify_error(e, method: method, path: path, params: params)
-        raise GovpayApiError, error_message
+      rescue StandardError
+        handle_error(error, method, path, params)
       end
     end
 
     private
+
+    def build_log_message(method, path, params, is_moto)
+      "#{self.class} sending #{method} request to govpay (#{path}), params: #{params}, moto: #{is_moto}"
+    end
+
+    def execute_request(method, path, params, is_moto)
+      RestClient::Request.execute(
+        method: method,
+        url: url(path),
+        payload: payload(params),
+        headers: {
+          "Authorization" => "Bearer #{bearer_token(is_moto)}",
+          "Content-Type" => "application/json"
+        }
+      )
+    end
+
+    def handle_error(_error, method, path, params)
+      error_message = "Error sending request to govpay (#{method} #{path}, params: #{params}): #{e}"
+      puts error_message
+      raise GovpayApiError, error_message
+    end
 
     def url(path)
       "#{@config.govpay_url}#{path}"

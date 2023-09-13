@@ -28,7 +28,7 @@ module GovpayIntegration
         response = execute_request(method, path, params, is_moto)
         puts "Received response from Govpay: #{response}"
         response
-      rescue StandardError
+      rescue StandardError => error
         handle_error(error, method, path, params)
       end
     end
@@ -51,8 +51,8 @@ module GovpayIntegration
       )
     end
 
-    def handle_error(_error, method, path, params)
-      error_message = "Error sending request to govpay (#{method} #{path}, params: #{params}): #{e}"
+    def handle_error(error, method, path, params)
+      error_message = "Error sending request to govpay (#{method} #{path}, params: #{params}): #{error}"
       puts error_message
       raise GovpayApiError, error_message
     end

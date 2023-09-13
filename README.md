@@ -1,31 +1,84 @@
-# GovpayIntegration
+# DEFRAGovPay Ruby Gem
 
-TODO: Delete this and the text below, and describe your gem
+The `defra-ruby-govpay` gem facilitates seamless integration with GovPay services, specifically tailored for DEFRA's WCR and WEX applications. It aims to abstract the integration code, offering a flexible and adaptable solution that requires minimal assumptions about the application's data models.
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/govpay_integration`. To experiment with that code, run `bin/console` for an interactive prompt.
+## Table of Contents
+
+1. [Installation](#installation)
+2. [Configuration](#configuration)
+3. [Usage](#usage)
+4. [Error Handling](#error-handling)
+5. [Testing](#testing)
 
 ## Installation
 
-TODO: Replace `UPDATE_WITH_YOUR_GEM_NAME_PRIOR_TO_RELEASE_TO_RUBYGEMS_ORG` with your gem name right after releasing it to RubyGems.org. Please do not do it earlier due to security reasons. Alternatively, replace this section with instructions to install your gem from git if you don't plan to release to RubyGems.org.
+Add this line to your application's Gemfile:
 
-Install the gem and add to the application's Gemfile by executing:
+```ruby
+gem 'defra-ruby-govpay'
+```
+And then execute
+```sh
+bundle install
+```
 
-    $ bundle add UPDATE_WITH_YOUR_GEM_NAME_PRIOR_TO_RELEASE_TO_RUBYGEMS_ORG
+Or install it yourself as:
+```sh
+gem install defra-ruby-govpay
+```
 
-If bundler is not being used to manage dependencies, install the gem by executing:
+## Configuration
 
-    $ gem install UPDATE_WITH_YOUR_GEM_NAME_PRIOR_TO_RELEASE_TO_RUBYGEMS_ORG
+Before you start using the gem, you need to configure it according to your requirements. Create an initializer file (e.g., `config/initializers/govpay.rb`) and set the necessary parameters:
+
+```ruby
+GovpayIntegration.configure do |config|
+  config.govpay_url = 'https://your-govpay-url.com'
+  config.govpay_front_office_api_token = 'your-front-office-token'
+  config.govpay_back_office_api_token = 'your-back-office-token'
+  config.host_is_back_office = false
+  # ... any other configurations
+end
+```
 
 ## Usage
 
-TODO: Write usage instructions here
+Here is a detailed guide on how to use the various components of the `defra-ruby-govpay` gem in your application:
 
-## Development
+## Sending a Request
 
-After checking out the repo, run `bin/setup` to install dependencies. Then, run `rake spec` to run the tests. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
+You can send requests to the GovPay API using the `send_request` method. Here's an example:
 
-To install this gem onto your local machine, run `bundle exec rake install`. To release a new version, update the version number in `version.rb`, and then run `bundle exec rake release`, which will create a git tag for the version, push git commits and the created tag, and push the `.gem` file to [rubygems.org](https://rubygems.org).
+after having followed the configuration step:
+```ruby
+govpay_api = GovpayIntegration::API.new
 
-## Contributing
+begin
+  response = govpay_api.send_request(
+    method: :get,
+    path: '/path/to/endpoint',
+    params: { param1: 'value1', param2: 'value2' },
+    is_moto: false
+  )
+  puts "Response received: #{response}"
+rescue GovpayIntegration::GovpayApiError => e
+  puts "An error occurred: #{e.message}"
+end
+```
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/[USERNAME]/govpay_integration.
+## Error Handling
+
+Errors are handled through the GovpayIntegration::GovpayApiError class. Here's an example of how you can handle errors:
+```ruby
+begin
+  # some code that might raise an error
+rescue GovpayIntegration::GovpayApiError => e
+  puts "An error occurred: #{e.message}"
+end
+```
+
+## Testing
+
+```
+bundle exec rspec
+```

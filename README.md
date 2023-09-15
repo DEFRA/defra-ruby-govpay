@@ -1,4 +1,4 @@
-# DEFRAGovPay Ruby Gem
+# Defra Ruby Govpay Ruby Gem
 
 The `defra-ruby-govpay` gem facilitates seamless integration with GovPay services, specifically tailored for DEFRA's WCR and WEX applications. It aims to abstract the integration code, offering a flexible and adaptable solution that requires minimal assumptions about the application's data models.
 
@@ -32,7 +32,7 @@ gem install defra-ruby-govpay
 Before you start using the gem, you need to configure it according to your requirements. Create an initializer file (e.g., `config/initializers/govpay.rb`) and set the necessary parameters:
 
 ```ruby
-GovpayIntegration.configure do |config|
+DefraRubyGovpay.configure do |config|
   config.govpay_url = 'https://your-govpay-url.com'
   config.govpay_front_office_api_token = 'your-front-office-token'
   config.govpay_back_office_api_token = 'your-back-office-token'
@@ -51,7 +51,7 @@ You can send requests to the GovPay API using the `send_request` method. Here's 
 
 after having followed the configuration step:
 ```ruby
-govpay_api = GovpayIntegration::API.new
+govpay_api = DefraRubyGovpay::API.new
 
 begin
   response = govpay_api.send_request(
@@ -61,18 +61,18 @@ begin
     is_moto: false
   )
   puts "Response received: #{response}"
-rescue GovpayIntegration::GovpayApiError => e
+rescue DefraRubyGovpay::GovpayApiError => e
   puts "An error occurred: #{e.message}"
 end
 ```
 
 ## Error Handling
 
-Errors are handled through the GovpayIntegration::GovpayApiError class. Here's an example of how you can handle errors:
+Errors are handled through the DefraRubyGovpay::GovpayApiError class. Here's an example of how you can handle errors:
 ```ruby
 begin
   # some code that might raise an error
-rescue GovpayIntegration::GovpayApiError => e
+rescue DefraRubyGovpay::GovpayApiError => e
   puts "An error occurred: #{e.message}"
 end
 ```

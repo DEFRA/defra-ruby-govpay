@@ -3,7 +3,7 @@
 require "webmock/rspec"
 require "spec_helper"
 
-RSpec.describe GovpayIntegration::API do
+RSpec.describe DefraRubyGovpay::API do
   let(:govpay_host) { "https://publicapi.payments.service.gov.uk" }
   let(:config) do
     double(:config,
@@ -88,7 +88,7 @@ RSpec.describe GovpayIntegration::API do
             params: { invalid: "params" },
             is_moto: false
           )
-        end.to raise_error(GovpayIntegration::GovpayApiError)
+        end.to raise_error(DefraRubyGovpay::GovpayApiError)
       end
     end
   end

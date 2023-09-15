@@ -1,12 +1,9 @@
 # frozen_string_literal: true
 
-require "govpay_integration"
-require "govpay_integration/object"
-require "govpay_integration/payment"
-require "govpay_integration/refund"
-require "govpay_integration/error"
-require "govpay_integration/api"
-require "govpay_integration/version"
+require "defra_ruby_govpay"
+require "defra_ruby_govpay/api"
+require "defra_ruby_govpay/version"
+require "defra_ruby_govpay/configuration"
 require "support/fixture_helper"
 
 RSpec.configure do |config|

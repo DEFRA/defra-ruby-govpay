@@ -1,13 +1,13 @@
 # frozen_string_literal: true
 
 require "json"
-require_relative "govpay_integration/version"
-require_relative "govpay_integration/configuration"
-require_relative "govpay_integration/api"
+require_relative "defra_ruby_govpay/version"
+require_relative "defra_ruby_govpay/configuration"
+require_relative "defra_ruby_govpay/api"
 
-# The GovpayIntegration module facilitates integration with Govpay services.
+# The DefraRubyGovpay module facilitates integration with Govpay services.
 # It provides a convenient and configurable way to interact with Govpay APIs in Defra's ruby applications.
-module GovpayIntegration
+module DefraRubyGovpay
   class << self
     attr_accessor :configuration
   end

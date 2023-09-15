@@ -1,10 +1,10 @@
 # frozen_string_literal: true
 
-require_relative "lib/govpay_integration/version"
+require_relative "lib/defra_ruby_govpay/version"
 
 Gem::Specification.new do |spec|
-  spec.name = "govpay_integration"
-  spec.version = GovpayIntegration::VERSION
+  spec.name = "defra_ruby_govpay"
+  spec.version = DefraRubyGovpay::VERSION
   spec.authors = ["Jerome Pratt"]
   spec.email = ["jerome.pratt@defra.gov.uk"]
 
@@ -14,7 +14,7 @@ Gem::Specification.new do |spec|
   spec.homepage = "https://github.com/DEFRA/defra-ruby-govpay"
   spec.required_ruby_version = ">= 2.6.0"
 
-  spec.metadata["source_code_uri"] = "https://github.com/yourorganization/govpay_integration"
+  spec.metadata["source_code_uri"] = "https://github.com/DEFRA/defra-ruby-govpay"
 
   spec.add_dependency "rest-client", "~> 2.1"
   spec.require_paths = ["lib"]

@@ -2,7 +2,7 @@
 
 require "rest-client"
 
-module GovpayIntegration
+module DefraRubyGovpay
   # Custom error class to handle Govpay API errors
   class GovpayApiError < StandardError
     def initialize(msg = "Govpay API error")
@@ -14,7 +14,7 @@ module GovpayIntegration
   # It handles the construction of request URLs, headers, and payload,
   # and also deals with any errors that occur during the API request.
   class API
-    def initialize(config = GovpayIntegration.configuration)
+    def initialize(config = DefraRubyGovpay.configuration)
       @config = config
       @is_back_office = config.host_is_back_office
       @front_office_token = config.govpay_front_office_api_token

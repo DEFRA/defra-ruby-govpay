@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    govpay_integration (0.1.0)
+    defra_ruby_govpay (0.1.0)
       rest-client (~> 2.1)
 
 GEM
@@ -80,7 +80,7 @@ PLATFORMS
   x86_64-darwin-22
 
 DEPENDENCIES
-  govpay_integration!
+  defra_ruby_govpay!
   rake (~> 13.0)
   rspec (~> 3.0)
   rubocop (~> 1.21)

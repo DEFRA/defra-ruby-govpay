@@ -18,4 +18,8 @@ Gem::Specification.new do |spec|
 
   spec.add_dependency "rest-client", "~> 2.1"
   spec.require_paths = ["lib"]
+
+  spec.files = Dir.chdir(File.expand_path('..', __FILE__)) do
+    `git ls-files -z`.split("\x0").reject { |f| f.match(%r{^(test|spec|features)/}) }
+  end
 end

@@ -22,11 +22,11 @@ module DefraRubyGovpay
     end
 
     def send_request(method:, path:, params: nil, is_moto: false)
-      Rails.logger.info build_log_message(method, path, params, is_moto)
+      Rails.logger.debug build_log_message(method, path, params, is_moto)
 
       begin
         response = execute_request(method, path, params, is_moto)
-        Rails.logger.info "Received response from Govpay: #{response}"
+        Rails.logger.debug "Received response from Govpay: #{response}"
         response
       rescue StandardError => error
         handle_error(error, method, path, params)
@@ -53,7 +53,7 @@ module DefraRubyGovpay
 
     def handle_error(error, method, path, params)
       error_message = "Error sending request to govpay (#{method} #{path}, params: #{params}): #{error}"
-      Rails.logger.info error_message
+      Rails.logger.debug error_message
       raise GovpayApiError, error_message
     end
 

@@ -1,16 +1,15 @@
 # frozen_string_literal: true
 
 require "webmock/rspec"
-require "spec_helper"
 
 RSpec.describe DefraRubyGovpay::API do
   let(:govpay_host) { "https://publicapi.payments.service.gov.uk" }
   let(:config) do
-    double(:config,
-           govpay_url: govpay_host,
-           host_is_back_office: false,
-           govpay_front_office_api_token: "front_office_token",
-           govpay_back_office_api_token: "back_office_token")
+    instance_double(DefraRubyGovpay::Configuration,
+                    govpay_url: govpay_host,
+                    host_is_back_office: false,
+                    govpay_front_office_api_token: "front_office_token",
+                    govpay_back_office_api_token: "back_office_token")
   end
   let(:govpay_service) { described_class.new(config) }
 
@@ -24,15 +23,10 @@ RSpec.describe DefraRubyGovpay::API do
   describe "#send_request" do
     context "when the request is valid" do
       it "returns a successful response" do
-        response = govpay_service.send_request(
-          method: :get,
-          path: "/valid_path",
-          params: { valid: "params" },
-          is_moto: false
-        )
+        response = govpay_service.send_request(method: :get, path: "/valid_path", params: { valid: "params" }, is_moto: false)
 
         # Here, you need to add assertions based on the expected successful response structure
-        expect(response).to be_a_kind_of(RestClient::Response)
+        expect(response).to be_a(RestClient::Response)
         # Add more assertions here based on the response structure
       end
     end
@@ -43,15 +37,9 @@ RSpec.describe DefraRubyGovpay::API do
       end
 
       it "sends the moto flag to GovPay" do
-        govpay_service.send_request(
-          method: :get,
-          path: "/valid_path",
-          params: { valid: "params", moto: true },
-          is_moto: true
-        )
+        govpay_service.send_request(method: :get, path: "/valid_path", params: { valid: "params", moto: true }, is_moto: true)
 
-        # Add assertions here to confirm the moto flag was correctly sent in the request
-        # This might be checking a part of the response or possibly checking a log entry
+        expect(WebMock).to have_requested(:get, /.*#{govpay_host}.*/).with(body: hash_including(moto: true))
       end
     end
 
@@ -61,14 +49,9 @@ RSpec.describe DefraRubyGovpay::API do
       end
 
       it "does not send the moto flag to GovPay" do
-        govpay_service.send_request(
-          method: :get,
-          path: "/valid_path",
-          params: { valid: "params" },
-          is_moto: false
-        )
+        govpay_service.send_request(method: :get, path: "/valid_path", params: { valid: "params", moto: false }, is_moto: false)
 
-        # Similar to the above test, add assertions here to confirm the moto flag was not sent in the request
+        expect(WebMock).to have_requested(:get, /.*#{govpay_host}.*/).with(body: hash_including(moto: false))
       end
     end
 
@@ -82,12 +65,7 @@ RSpec.describe DefraRubyGovpay::API do
 
       it "raises a GovpayApiError" do
         expect do
-          govpay_service.send_request(
-            method: :get,
-            path: "/invalid_path",
-            params: { invalid: "params" },
-            is_moto: false
-          )
+          govpay_service.send_request(method: :get, path: "/invalid_path", params: { invalid: "params" }, is_moto: false)
         end.to raise_error(DefraRubyGovpay::GovpayApiError)
       end
     end

@@ -2,6 +2,6 @@
 
 RSpec.describe DefraRubyGovpay do
   it "has a version number" do
-    expect(DefraRubyGovpay::VERSION).not_to be nil
+    expect(DefraRubyGovpay::VERSION).not_to be_nil
   end
 end

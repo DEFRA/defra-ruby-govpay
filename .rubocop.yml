@@ -1,5 +1,25 @@
-AllCops:
-  TargetRubyVersion: 2.6
+inherit_from: .rubocop_todo.yml
+
+inherit_gem:
+  defra_ruby_style:
+    - default.yml
+
+require:
+  - rubocop-factory_bot
+  - rubocop-rake
+  - rubocop-rspec
+
+Layout/LineLength:
+  Max: 120
+
+Metrics/BlockLength:
+  Exclude:
+    - 'spec/**/*'
+
+# TODO: Clarify why rubocop recommends against using OpenStruct
+Style/OpenStructUse:
+  Exclude:
+    - 'lib/defra_ruby_govpay/object.rb'
 
 Style/StringLiterals:
   Enabled: true
@@ -8,10 +28,3 @@ Style/StringLiterals:
 Style/StringLiteralsInInterpolation:
   Enabled: true
   EnforcedStyle: double_quotes
-
-Layout/LineLength:
-  Max: 120
-
-Metrics/BlockLength:
-  Exclude:
-    - 'spec/**/*'

@@ -20,4 +20,13 @@ module DefraRubyGovpay
     self.configuration ||= Configuration.new
     yield(configuration)
   end
+
+  # Use DefraRubyGovpay.logger if it exists, else use a simple console logger
+  def self.logger
+    @logger ||= defined?(Rails) ? DefraRubyGovpay.logger : Logger.new($stdout)
+  end
+
+  def self.logger=(logger)
+    @logger = logger
+  end
 end

@@ -22,30 +22,32 @@ module DefraRubyGovpay
     end
 
     def send_request(method:, path:, params: nil, is_moto: false)
-      Rails.logger.debug build_log_message(method, path, params, is_moto)
+      @is_moto = is_moto
+      DefraRubyGovpay.logger.debug build_log_message(method, path, params)
 
       begin
-        response = execute_request(method, path, params, is_moto)
-        Rails.logger.debug "Received response from Govpay: #{response}"
+        response = execute_request(method, path, params)
+        DefraRubyGovpay.logger.debug "Received response from Govpay: #{response}"
         response
-      rescue StandardError => error
-        handle_error(error, method, path, params)
+      rescue StandardError => e
+        handle_error(e, method, path, params)
       end
     end
 
     private
 
-    def build_log_message(method, path, params, is_moto)
-      "#{self.class} sending #{method} request to govpay (#{path}), params: #{params}, moto: #{is_moto}"
+    def build_log_message(method, path, params)
+      "#{self.class} sending #{method} request to govpay (#{path}), params: #{params}, moto: #{@is_moto}, " \
+        "govpay API token ending \"#{bearer_token[-5..]}\""
     end
 
-    def execute_request(method, path, params, is_moto)
+    def execute_request(method, path, params)
       RestClient::Request.execute(
         method: method,
         url: url(path),
         payload: payload(params),
         headers: {
-          "Authorization" => "Bearer #{bearer_token(is_moto)}",
+          "Authorization" => "Bearer #{bearer_token}",
           "Content-Type" => "application/json"
         }
       )
@@ -53,7 +55,7 @@ module DefraRubyGovpay
 
     def handle_error(error, method, path, params)
       error_message = "Error sending request to govpay (#{method} #{path}, params: #{params}): #{error}"
-      Rails.logger.debug error_message
+      DefraRubyGovpay.logger.debug error_message
       raise GovpayApiError, error_message
     end
 
@@ -61,10 +63,12 @@ module DefraRubyGovpay
       "#{@config.govpay_url}#{path}"
     end
 
-    def bearer_token(is_moto)
-      return @front_office_token unless @is_back_office
-
-      is_moto ? @back_office_token : @front_office_token
+    def bearer_token
+      @bearer_token ||= if @is_back_office
+                          @is_moto ? @back_office_token : @front_office_token
+                        else
+                          @front_office_token
+                        end
     end
 
     def payload(params)

@@ -23,7 +23,7 @@ module DefraRubyGovpay
 
     def send_request(method:, path:, params: nil, is_moto: false)
       @is_moto = is_moto
-      DefraRubyGovpay.logger.debug DefraRubyGovpay.logger.debug build_log_message(method, path, params)
+      DefraRubyGovpay.logger.debug build_log_message(method, path, params)
 
       begin
         response = execute_request(method, path, params)

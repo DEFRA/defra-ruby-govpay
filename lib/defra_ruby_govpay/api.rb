@@ -23,7 +23,7 @@ module DefraRubyGovpay
 
     def send_request(method:, path:, params: nil, is_moto: false)
       @is_moto = is_moto
-      DefraRubyGovpay.logger.debug build_log_message(method, path, params)
+      DefraRubyGovpay.logger.debug DefraRubyGovpay.logger.debug build_log_message(method, path, params)
 
       begin
         response = execute_request(method, path, params)
@@ -54,8 +54,9 @@ module DefraRubyGovpay
     end
 
     def handle_error(error, method, path, params)
-      error_message = "Error sending request to govpay (#{method} #{path}, params: #{params}): #{error}"
-      DefraRubyGovpay.logger.debug error_message
+      error_message = "Error sending request to govpay (#{method} #{path}, params: #{params}), " \
+                      "response body #{JSON.parse(error.response.body)}: #{error}"
+      DefraRubyGovpay.logger.error error_message
       raise GovpayApiError, error_message
     end
 

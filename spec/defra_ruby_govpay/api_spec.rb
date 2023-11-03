@@ -69,5 +69,36 @@ RSpec.describe DefraRubyGovpay::API do
         end.to raise_error(DefraRubyGovpay::GovpayApiError)
       end
     end
+
+    context "when the govpay API retuns a 422 response" do
+
+      let(:logger) { DefraRubyGovpay.logger }
+
+      before do
+        stub_request(:any, /.*#{govpay_host}.*/).to_return(
+          status: 422,
+          body: {
+            field: "description",
+            code: "P0102",
+            description: "Invalid attribute"
+          }.to_json
+        )
+        # Avoid cluttering unit tesrt output
+        DefraRubyGovpay.logger = Logger.new("/dev/null")
+        allow(logger).to receive(:error).with(any_args).and_call_original
+      end
+
+      # rubocop:disable RSpec/ExampleLength:
+      it "logs the error response details" do
+        govpay_service.send_request(method: :get, path: "/valid_path", params: { valid: "params", moto: false })
+      rescue DefraRubyGovpay::GovpayApiError
+        aggregate_failures do
+          expect(logger).to have_received(:error).with(/field.*description/)
+          expect(logger).to have_received(:error).with(/code.*P0102/)
+          expect(logger).to have_received(:error).with(/description.*Invalid attribute/)
+        end
+      end
+      # rubocop:enable RSpec/ExampleLength:
+    end
   end
 end

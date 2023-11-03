@@ -23,7 +23,7 @@ module DefraRubyGovpay
 
   # Use DefraRubyGovpay.logger if it exists, else use a simple console logger
   def self.logger
-    @logger ||= defined?(Rails) ? DefraRubyGovpay.logger : Logger.new($stdout)
+    @logger ||= defined?(Rails) ? Rails.logger : Logger.new($stdout)
   end
 
   def self.logger=(logger)

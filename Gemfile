@@ -7,7 +7,7 @@ gemspec
 
 gem "byebug"
 
-gem "defra_ruby_style"
+gem "defra_ruby_style", "~> 0.4"
 
 gem "rake", "~> 13.0"
 

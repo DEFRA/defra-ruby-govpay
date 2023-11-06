@@ -12,14 +12,15 @@ Gem::Specification.new do |spec|
   spec.description = "This gem abstracts the Govpay integration code, facilitating " \
                      "integration within defra ruby applications."
   spec.homepage = "https://github.com/DEFRA/defra-ruby-govpay"
-  spec.required_ruby_version = ">= 2.6.0"
+  spec.required_ruby_version = ">= 3.2.0"
 
   spec.metadata["source_code_uri"] = "https://github.com/DEFRA/defra-ruby-govpay"
 
   spec.add_dependency "rest-client", "~> 2.1"
   spec.require_paths = ["lib"]
 
-  spec.files = Dir.chdir(File.expand_path('..', __FILE__)) do
+  spec.files = Dir.chdir(File.expand_path(__dir__)) do
     `git ls-files -z`.split("\x0").reject { |f| f.match(%r{^(test|spec|features)/}) }
   end
+  spec.metadata["rubygems_mfa_required"] = "true"
 end

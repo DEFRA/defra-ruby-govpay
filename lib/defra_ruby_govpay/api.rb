@@ -55,7 +55,7 @@ module DefraRubyGovpay
 
     def handle_error(error, method, path, params)
       error_message = "Error sending request to govpay (#{method} #{path}, params: #{params}), " \
-                      "response body #{JSON.parse(error.response.body)}: #{error}"
+                      "response body: #{error.response&.body}: #{error}"
       DefraRubyGovpay.logger.error error_message
       raise GovpayApiError, error_message
     end

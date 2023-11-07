@@ -7,6 +7,8 @@ gemspec
 
 gem "byebug"
 
+gem "github_changelog_generator"
+
 gem "defra_ruby_style", "~> 0.4"
 
 gem "rake", "~> 13.0"

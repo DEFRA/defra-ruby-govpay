@@ -13,13 +13,8 @@ module DefraRubyGovpay
   # The API class is responsible for making requests to the Govpay API.
   # It handles the construction of request URLs, headers, and payload,
   # and also deals with any errors that occur during the API request.
+
   class API
-    def initialize(config = DefraRubyGovpay.configuration)
-      @config = config
-      @is_back_office = config.host_is_back_office
-      @front_office_token = config.govpay_front_office_api_token
-      @back_office_token = config.govpay_back_office_api_token
-    end
 
     def send_request(method:, path:, params: nil, is_moto: false)
       @is_moto = is_moto
@@ -60,16 +55,32 @@ module DefraRubyGovpay
       raise GovpayApiError, error_message
     end
 
+    def govpay_url
+      @govpay_url ||= DefraRubyGovpay.configuration.govpay_url
+    end
+
     def url(path)
-      "#{@config.govpay_url}#{path}"
+      "#{govpay_url}#{path}"
+    end
+
+    def back_office_app
+      @back_office_app ||= DefraRubyGovpay.configuration.host_is_back_office
+    end
+
+    def front_office_token
+      @front_office_token ||= DefraRubyGovpay.configuration.govpay_front_office_api_token
+    end
+
+    def back_office_token
+      @back_office_token ||= DefraRubyGovpay.configuration.govpay_back_office_api_token
     end
 
     def bearer_token
-      @bearer_token ||= if @is_back_office
-                          @is_moto ? @back_office_token : @front_office_token
-                        else
-                          @front_office_token
-                        end
+      if back_office_app
+        @is_moto ? back_office_token : front_office_token
+      else
+        front_office_token
+      end
     end
 
     def payload(params)

@@ -4,14 +4,14 @@ require "webmock/rspec"
 
 RSpec.describe DefraRubyGovpay::API do
   let(:govpay_host) { "https://publicapi.payments.service.gov.uk" }
-  let(:govpay_service) { described_class.new }
+  let(:host_is_back_office) { false }
+  let(:govpay_service) { described_class.new(host_is_back_office: host_is_back_office) }
   let(:config) { DefraRubyGovpay.configuration }
 
   before do
 
     DefraRubyGovpay.configure do |config|
       config.govpay_url = govpay_host
-      config.host_is_back_office = false
       config.govpay_front_office_api_token = "front_office_token"
       config.govpay_back_office_api_token = "back_office_token"
     end
@@ -36,9 +36,7 @@ RSpec.describe DefraRubyGovpay::API do
     end
 
     context "when the request is from the back-office" do
-      before do
-        allow(config).to receive(:host_is_back_office).and_return(true)
-      end
+      let(:host_is_back_office) { true }
 
       it "sends the moto flag to GovPay" do
         govpay_service.send_request(method: :get, path: "/valid_path", params: { valid: "params", moto: true }, is_moto: true)
@@ -48,9 +46,7 @@ RSpec.describe DefraRubyGovpay::API do
     end
 
     context "when the request is from the front-office" do
-      before do
-        allow(config).to receive(:host_is_back_office).and_return(false)
-      end
+      let(:host_is_back_office) { false }
 
       it "does not send the moto flag to GovPay" do
         govpay_service.send_request(method: :get, path: "/valid_path", params: { valid: "params", moto: false }, is_moto: false)

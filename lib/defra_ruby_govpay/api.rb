@@ -3,6 +3,7 @@
 require "rest-client"
 
 module DefraRubyGovpay
+
   # Custom error class to handle Govpay API errors
   class GovpayApiError < StandardError
     def initialize(msg = "Govpay API error")
@@ -15,6 +16,10 @@ module DefraRubyGovpay
   # and also deals with any errors that occur during the API request.
 
   class API
+
+    def initialize(host_is_back_office:)
+      @host_is_back_office = host_is_back_office
+    end
 
     def send_request(method:, path:, params: nil, is_moto: false)
       @is_moto = is_moto
@@ -63,10 +68,6 @@ module DefraRubyGovpay
       "#{govpay_url}#{path}"
     end
 
-    def back_office_app
-      @back_office_app ||= DefraRubyGovpay.configuration.host_is_back_office
-    end
-
     def front_office_token
       @front_office_token ||= DefraRubyGovpay.configuration.govpay_front_office_api_token
     end
@@ -76,7 +77,7 @@ module DefraRubyGovpay
     end
 
     def bearer_token
-      if back_office_app
+      if @host_is_back_office
         @is_moto ? back_office_token : front_office_token
       else
         front_office_token

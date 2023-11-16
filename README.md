@@ -36,7 +36,6 @@ DefraRubyGovpay.configure do |config|
   config.govpay_url = 'https://your-govpay-url.com'
   config.govpay_front_office_api_token = 'your-front-office-token'
   config.govpay_back_office_api_token = 'your-back-office-token'
-  config.host_is_back_office = false
   # ... any other configurations
 end
 ```
@@ -49,9 +48,10 @@ Here is a detailed guide on how to use the various components of the `defra-ruby
 
 You can send requests to the GovPay API using the `send_request` method. Here's an example:
 
-after having followed the configuration step:
+After having followed the configuration step, create an API instance. This has a mandatory parameter to indicate
+whether the host is a back-office application, in which case any payments it creates will be flagged as MOTO.
 ```ruby
-govpay_api = DefraRubyGovpay::API.new
+govpay_api = DefraRubyGovpay::API.new(host_is_back_office: false)
 
 begin
   response = govpay_api.send_request(

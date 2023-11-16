@@ -2,7 +2,15 @@
 
 ## [Unreleased](https://github.com/DEFRA/defra-ruby-govpay/tree/HEAD)
 
-[Full Changelog](https://github.com/DEFRA/defra-ruby-govpay/compare/v0.2.3...HEAD)
+[Full Changelog](https://github.com/DEFRA/defra-ruby-govpay/compare/v0.2.4...HEAD)
+
+**Fixed bugs:**
+
+- fix host\_is\_back\_office [\#11](https://github.com/DEFRA/defra-ruby-govpay/pull/11) ([PaulDoyle-DEFRA](https://github.com/PaulDoyle-DEFRA))
+
+## [v0.2.4](https://github.com/DEFRA/defra-ruby-govpay/tree/v0.2.4) (2023-11-10)
+
+[Full Changelog](https://github.com/DEFRA/defra-ruby-govpay/compare/v0.2.3...v0.2.4)
 
 **Fixed bugs:**
 
@@ -10,6 +18,7 @@
 
 **Merged pull requests:**
 
+- Version 0.2.4 [\#10](https://github.com/DEFRA/defra-ruby-govpay/pull/10) ([PaulDoyle-DEFRA](https://github.com/PaulDoyle-DEFRA))
 - Bump rake from 13.0.6 to 13.1.0 [\#6](https://github.com/DEFRA/defra-ruby-govpay/pull/6) ([dependabot[bot]](https://github.com/apps/dependabot))
 
 ## [v0.2.3](https://github.com/DEFRA/defra-ruby-govpay/tree/v0.2.3) (2023-11-07)

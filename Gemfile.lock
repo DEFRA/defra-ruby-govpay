@@ -17,7 +17,7 @@ GEM
       minitest (>= 5.1)
       mutex_m
       tzinfo (~> 2.0)
-    addressable (2.8.5)
+    addressable (2.8.6)
       public_suffix (>= 2.0.2, < 6.0)
     ast (2.4.2)
     async (2.6.5)
@@ -48,7 +48,8 @@ GEM
     console (1.23.2)
       fiber-annotation
       fiber-local
-    crack (0.4.5)
+    crack (1.0.0)
+      bigdecimal
       rexml
     defra_ruby_style (0.4.0)
       rubocop (>= 1.0, < 2.0)
@@ -78,7 +79,7 @@ GEM
       octokit (~> 4.6)
       rainbow (>= 2.2.1)
       rake (>= 10.0)
-    hashdiff (1.0.1)
+    hashdiff (1.1.0)
     http-accept (1.7.0)
     http-cookie (1.0.5)
       domain_name (~> 0.5)
@@ -108,7 +109,7 @@ GEM
     protocol-http2 (0.15.1)
       protocol-hpack (~> 1.4)
       protocol-http (~> 0.18)
-    public_suffix (5.0.3)
+    public_suffix (5.0.4)
     racc (1.7.2)
     rainbow (3.1.1)
     rake (13.1.0)
@@ -168,7 +169,7 @@ GEM
       unf_ext
     unf_ext (0.0.8.2)
     unicode-display_width (2.5.0)
-    webmock (3.19.1)
+    webmock (3.22.0)
       addressable (>= 2.8.0)
       crack (>= 0.3.2)
       hashdiff (>= 0.4.0, < 2.0.0)

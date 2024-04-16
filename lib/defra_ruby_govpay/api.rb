@@ -36,7 +36,7 @@ module DefraRubyGovpay
     private
 
     def build_log_message(method, path, params, is_moto)
-      "#{self.class} sending #{method} request to govpay (#{path}), params: #{params}, moto: #{is_moto}"
+      "#{self.class} sending #{method} request to govpay (#{url(path)}), params: #{params}, moto: #{is_moto}"
     end
 
     def execute_request(method, path, params, is_moto)

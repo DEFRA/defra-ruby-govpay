@@ -7,8 +7,9 @@ The `defra-ruby-govpay` gem facilitates seamless integration with GovPay service
 1. [Installation](#installation)
 2. [Configuration](#configuration)
 3. [Usage](#usage)
-4. [Error Handling](#error-handling)
-5. [Testing](#testing)
+4. [Webhook Handling](#webhook-handling)
+5. [Error Handling](#error-handling)
+6. [Testing](#testing)
 
 ## Installation
 
@@ -76,6 +77,50 @@ rescue DefraRubyGovpay::GovpayApiError => e
   puts "An error occurred: #{e.message}"
 end
 ```
+
+## Webhook Handling
+
+The gem provides functionality for handling Gov.UK Pay webhooks for both payments and refunds.
+
+### Processing Webhooks
+
+To process a webhook, use the `GovpayWebhookJob` class:
+
+```ruby
+webhook_data = DefraRubyGovpay::GovpayWebhookJob.process(webhook_body)
+```
+
+The `process` method will automatically determine if the webhook is for a payment or a refund and route it to the appropriate service. It returns a hash containing the extracted data from the webhook.
+
+### Validating Webhook Signatures
+
+To validate the signature of a webhook, use the `CallbackValidator` class:
+
+```ruby
+valid = DefraRubyGovpay::CallbackValidator.call(
+  request_body,
+  ENV['GOVPAY_WEBHOOK_SIGNING_SECRET'],
+  request.headers['Pay-Signature']
+)
+
+if valid
+  # Process the webhook
+else
+  # Handle invalid signature
+end
+```
+
+### Payment vs Refund Webhooks
+
+The gem can handle both payment and refund webhooks:
+
+- **Payment Webhooks**: These have a `resource_type` of "payment" and contain payment status information in `resource.state.status`.
+- **Refund Webhooks**: These have a `refund_id` field and contain refund status information in the `status` field.
+
+The appropriate service class will be used based on the webhook type:
+
+- `GovpayWebhookPaymentService` for payment webhooks
+- `GovpayWebhookRefundService` for refund webhooks
 
 ## Testing
 

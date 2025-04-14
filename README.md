@@ -84,13 +84,78 @@ The gem provides functionality for handling Gov.UK Pay webhooks for both payment
 
 ### Processing Webhooks
 
-To process a webhook, use the `GovpayWebhookJob` class:
+We recommend creating application-specific handler classes to encapsulate your business logic, while keeping your webhook job clean and focused on routing:
 
 ```ruby
-webhook_data = DefraRubyGovpay::GovpayWebhookJob.process(webhook_body)
+# app/services/your_app/govpay_payment_handler.rb
+module YourApp
+  class GovpayPaymentHandler
+    def self.process(webhook_body)
+      DefraRubyGovpay::GovpayWebhookPaymentService.run(webhook_body) do |args|
+        # App-specific payment update logic
+        payment = Payment.find_by(govpay_id: args[:id])
+
+        if payment.present?
+          payment.update(status: args[:status])
+          # Additional application-specific logic here
+        else
+          Rails.logger.error "Payment not found for govpay_id: #{args[:id]}"
+        end
+      end
+    end
+  end
+end
+
+# app/services/your_app/govpay_refund_handler.rb
+module YourApp
+  class GovpayRefundHandler
+    def self.process(webhook_body)
+      DefraRubyGovpay::GovpayWebhookRefundService.run(webhook_body) do |args|
+        # App-specific refund update logic
+        refund = Refund.find_by(govpay_id: args[:id])
+
+        if refund.present?
+          refund.update(status: args[:status])
+          # Additional application-specific logic here
+        else
+          Rails.logger.error "Refund not found for govpay_id: #{args[:id]}"
+        end
+      end
+    end
+  end
+end
 ```
 
-The `process` method will automatically determine if the webhook is for a payment or a refund and route it to the appropriate service. It returns a hash containing the extracted data from the webhook.
+#### Application-Specific Logic
+
+The `run` method of the `GovpayWebhookPaymentService` and
+`GovpayWebhookRefundService` classes accepts a block that allows you to define
+application-specific logic for processing the webhook data. This is where you
+can update your application's database or perform any other necessary actions
+based on the webhook data.
+
+The block receives a hash with the following keys:
+- `id`: The payment or refund ID
+- `status`: The new status
+- `type`: Either "payment" or "refund"
+- `webhook_body`: The full webhook body for additional processing
+
+They then return a hash containing the extracted data from the webhook.
+
+#### Direct Usage
+
+Alternatively, you can use the services directly with blocks:
+
+```ruby
+# For payment webhooks
+webhook_data = DefraRubyGovpay::GovpayWebhookPaymentService.run(webhook_body) do |args|
+  # Application-specific logic to update payment status
+  payment = Payment.find_by(govpay_id: args[:id])
+  payment&.update(status: args[:status])
+  # You can access the full webhook body with args[:webhook_body]
+  # and determine the type with args[:type] ("payment" or "refund")
+end
+```
 
 ### Validating Webhook Signatures
 

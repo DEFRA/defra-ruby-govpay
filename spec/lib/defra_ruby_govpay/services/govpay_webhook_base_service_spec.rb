@@ -45,6 +45,28 @@ RSpec.describe DefraRubyGovpay::GovpayWebhookBaseService do
           service_type: "front_office"
         )
       end
+      
+      context "with status updater block" do
+        let(:status_updater_called) { false }
+        let(:status_updater) { ->(args) { @status_updater_called = true; @status_updater_args = args } }
+        let(:service) { service_class.new(status_updater) }
+        
+        before do
+          @status_updater_called = false
+          @status_updater_args = nil
+        end
+        
+        it "calls the status updater block with correct arguments" do
+          service.run(webhook_body)
+          
+          expect(@status_updater_called).to be true
+          expect(@status_updater_args).to include(
+            id: "test_id",
+            status: "test_status",
+            type: "test"
+          )
+        end
+      end
 
       context "with previous status" do
         before do
@@ -127,24 +149,5 @@ RSpec.describe DefraRubyGovpay::GovpayWebhookBaseService do
     end
   end
 
-  describe "#sanitize_webhook_body" do
-    let(:service) { described_class.new }
-    let(:webhook_body) do
-      {
-        "resource" => {
-          "email" => "test@example.com",
-          "card_details" => { "number" => "1234" },
-          "other_field" => "value"
-        }
-      }
-    end
 
-    it "removes sensitive information" do
-      result = service.send(:sanitize_webhook_body, webhook_body)
-      
-      expect(result["resource"]).not_to include("email")
-      expect(result["resource"]).not_to include("card_details")
-      expect(result["resource"]).to include("other_field")
-    end
-  end
 end

@@ -4,13 +4,17 @@ module DefraRubyGovpay
   class GovpayWebhookBaseService
     class InvalidGovpayStatusTransition < StandardError; end
 
-    attr_accessor :webhook_body, :previous_status
+    attr_accessor :webhook_body, :previous_status, :status_updater
 
     # override this in subclasses
     VALID_STATUS_TRANSITIONS = {}.freeze
 
-    def self.run(webhook_body)
-      new.run(webhook_body)
+    def self.run(webhook_body, &block)
+      new(block).run(webhook_body)
+    end
+
+    def initialize(status_updater = nil)
+      @status_updater = status_updater
     end
 
     def run(webhook_body)
@@ -23,6 +27,9 @@ module DefraRubyGovpay
       else
         validate_status_transition if previous_status
       end
+
+      # Update the status in the application using the provided block or default implementation
+      update_payment_or_refund_status
 
       extract_data_from_webhook
     end
@@ -48,18 +55,7 @@ module DefraRubyGovpay
       webhook_body.dig("resource", "moto") ? "back_office" : "front_office"
     end
 
-    def sanitize_webhook_body
-      return webhook_body unless webhook_body.is_a?(Hash)
 
-      sanitized = webhook_body.deep_dup
-
-      if sanitized["resource"].is_a?(Hash)
-        sanitized["resource"].delete("email")
-        sanitized["resource"].delete("card_details")
-      end
-
-      sanitized
-    end
 
     # The following methods must be implemented in subclasses
     def payment_or_refund_str
@@ -76,6 +72,17 @@ module DefraRubyGovpay
 
     def webhook_payment_or_refund_status
       raise NotImplementedError
+    end
+
+    def update_payment_or_refund_status
+      if status_updater.respond_to?(:call)
+        status_updater.call(
+          id: webhook_payment_or_refund_id,
+          status: webhook_payment_or_refund_status,
+          type: payment_or_refund_str,
+          webhook_body: webhook_body
+        )
+      end
     end
   end
 end

@@ -16,7 +16,11 @@ module DefraRubyGovpay
     end
 
     def validate_webhook_body
-      return if webhook_payment_or_refund_id.present? && webhook_payment_or_refund_status.present?
+      refund_id = webhook_payment_or_refund_id
+      refund_status = webhook_payment_or_refund_status
+
+      return if refund_id && !refund_id.to_s.strip.empty? &&
+                refund_status && !refund_status.to_s.strip.empty?
 
       raise ArgumentError, "Invalid refund webhook: #{webhook_body}"
     end
@@ -35,7 +39,7 @@ module DefraRubyGovpay
 
     def extract_data_from_webhook
       data = super
-      
+
       # Add refund-specific data
       data.merge!(
         payment_id: webhook_payment_id,

@@ -10,7 +10,7 @@ RSpec.describe DefraRubyGovpay::GovpayWebhookPaymentService do
 
     it "extracts payment data from the webhook body" do
       result = service.run(webhook_body)
-      
+
       expect(result).to include(
         payment_id: "hu20sqlact5260q2nanm0q8u93",
         status: "submitted",

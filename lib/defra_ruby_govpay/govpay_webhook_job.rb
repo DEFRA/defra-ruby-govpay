@@ -35,7 +35,7 @@ module DefraRubyGovpay
 
     def handle_error(error, webhook_body)
       service_type = webhook_body.dig("resource", "moto") ? "back_office" : "front_office"
-      
+
       error_data = {
         error: error,
         refund_id: webhook_body&.dig("resource", "refund_id") || webhook_body&.dig("refund_id"),
@@ -43,10 +43,10 @@ module DefraRubyGovpay
         service_type: service_type,
         webhook_body: sanitize_webhook_body(webhook_body)
       }
-      
+
       # Log the error if a logger is available
       DefraRubyGovpay.logger.error("Error processing Govpay webhook: #{error.message}") if defined?(DefraRubyGovpay.logger)
-      
+
       error_data
     end
   end

@@ -10,7 +10,7 @@ RSpec.describe DefraRubyGovpay::GovpayWebhookRefundService do
 
     it "extracts refund data from the webhook body" do
       result = service.run(webhook_body)
-      
+
       expect(result).to include(
         payment_id: "789",
         status: "success",

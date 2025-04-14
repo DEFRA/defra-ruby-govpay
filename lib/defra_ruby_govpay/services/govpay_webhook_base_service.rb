@@ -24,8 +24,8 @@ module DefraRubyGovpay
 
       if previous_status && webhook_payment_or_refund_status == previous_status
         # Status unchanged
-      else
-        validate_status_transition if previous_status
+      elsif previous_status
+        validate_status_transition
       end
 
       # Update the status in the application using the provided block or default implementation
@@ -40,7 +40,7 @@ module DefraRubyGovpay
       return if self.class::VALID_STATUS_TRANSITIONS[previous_status]&.include?(webhook_payment_or_refund_status)
 
       raise InvalidGovpayStatusTransition, "Invalid #{payment_or_refund_str} status transition " \
-                                          "from #{previous_status} to #{webhook_payment_or_refund_status}"
+                                           "from #{previous_status} to #{webhook_payment_or_refund_status}"
     end
 
     def extract_data_from_webhook
@@ -54,8 +54,6 @@ module DefraRubyGovpay
     def service_type
       webhook_body.dig("resource", "moto") ? "back_office" : "front_office"
     end
-
-
 
     # The following methods must be implemented in subclasses
     def payment_or_refund_str
@@ -75,14 +73,14 @@ module DefraRubyGovpay
     end
 
     def update_payment_or_refund_status
-      if status_updater.respond_to?(:call)
-        status_updater.call(
-          id: webhook_payment_or_refund_id,
-          status: webhook_payment_or_refund_status,
-          type: payment_or_refund_str,
-          webhook_body: webhook_body
-        )
-      end
+      return unless status_updater.respond_to?(:call)
+
+      status_updater.call(
+        id: webhook_payment_or_refund_id,
+        status: webhook_payment_or_refund_status,
+        type: payment_or_refund_str,
+        webhook_body: webhook_body
+      )
     end
   end
 end

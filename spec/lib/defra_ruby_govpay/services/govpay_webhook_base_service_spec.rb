@@ -38,27 +38,32 @@ RSpec.describe DefraRubyGovpay::GovpayWebhookBaseService do
 
       it "returns extracted data" do
         result = service.run(webhook_body)
-        
+
         expect(result).to include(
           payment_id: "test_id",
           status: "test_status",
           service_type: "front_office"
         )
       end
-      
+
       context "with status updater block" do
         let(:status_updater_called) { false }
-        let(:status_updater) { ->(args) { @status_updater_called = true; @status_updater_args = args } }
+        let(:status_updater) do
+          lambda { |args|
+            @status_updater_called = true
+            @status_updater_args = args
+          }
+        end
         let(:service) { service_class.new(status_updater) }
-        
+
         before do
           @status_updater_called = false
           @status_updater_args = nil
         end
-        
+
         it "calls the status updater block with correct arguments" do
           service.run(webhook_body)
-          
+
           expect(@status_updater_called).to be true
           expect(@status_updater_args).to include(
             id: "test_id",
@@ -148,6 +153,5 @@ RSpec.describe DefraRubyGovpay::GovpayWebhookBaseService do
       end
     end
   end
-
 
 end

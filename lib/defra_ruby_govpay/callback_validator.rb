@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'openssl'
+require "openssl"
 
 module DefraRubyGovpay
   class CallbackValidator
@@ -17,7 +17,7 @@ module DefraRubyGovpay
     end
 
     def call
-      hmac = OpenSSL::HMAC.hexdigest('sha256', signing_secret.encode('utf-8'), request_body.encode('utf-8'))
+      hmac = OpenSSL::HMAC.hexdigest("sha256", signing_secret.encode("utf-8"), request_body.encode("utf-8"))
 
       # Compare the generated HMAC with the Pay-Signature header
       hmac == pay_signature_header

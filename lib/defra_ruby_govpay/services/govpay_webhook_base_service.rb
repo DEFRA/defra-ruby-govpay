@@ -78,7 +78,6 @@ module DefraRubyGovpay
       status_updater.call(
         id: webhook_payment_or_refund_id,
         status: webhook_payment_or_refund_status,
-        type: payment_or_refund_str,
         webhook_body: webhook_body
       )
     end

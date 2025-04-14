@@ -74,12 +74,6 @@ RSpec.describe DefraRubyGovpay::GovpayWebhookBaseService do
           service.run(webhook_body)
           expect(captured_args[:status]).to eq("test_status")
         end
-
-        it "passes the correct type to the block" do
-          allow(block).to receive(:call) { |args| captured_args.merge!(args) }
-          service.run(webhook_body)
-          expect(captured_args[:type]).to eq("test")
-        end
       end
 
       # Split the nested contexts to reduce nesting depth

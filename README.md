@@ -82,6 +82,22 @@ end
 
 The gem provides functionality for handling Gov.UK Pay webhooks for both payments and refunds.
 
+#### Application-Specific Logic
+
+The `run` method of the `GovpayWebhookPaymentService` and
+`GovpayWebhookRefundService` classes accepts a block that allows you to define
+application-specific logic for processing the webhook data. This is where you
+can update your application's database or perform any other necessary actions
+based on the webhook data.
+
+The block receives a hash with the following keys:
+- `id`: The payment or refund ID
+- `status`: The new status
+- `type`: Either "payment" or "refund"
+- `webhook_body`: The full webhook body for additional processing
+
+They then return a hash containing the extracted data from the webhook.
+
 ### Processing Webhooks
 
 We recommend creating application-specific handler classes to encapsulate your business logic, while keeping your webhook job clean and focused on routing:
@@ -125,26 +141,6 @@ module YourApp
   end
 end
 ```
-
-#### Application-Specific Logic
-
-The `run` method of the `GovpayWebhookPaymentService` and
-`GovpayWebhookRefundService` classes accepts a block that allows you to define
-application-specific logic for processing the webhook data. This is where you
-can update your application's database or perform any other necessary actions
-based on the webhook data.
-
-The block receives a hash with the following keys:
-- `id`: The payment or refund ID
-- `status`: The new status
-- `type`: Either "payment" or "refund"
-- `webhook_body`: The full webhook body for additional processing
-
-They then return a hash containing the extracted data from the webhook.
-
-#### Direct Usage
-
-Alternatively, you can use the services directly with blocks:
 
 ```ruby
 # For payment webhooks

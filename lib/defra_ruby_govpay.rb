@@ -14,7 +14,6 @@ require_relative "defra_ruby_govpay/services/govpay_webhook_base_service"
 require_relative "defra_ruby_govpay/services/govpay_webhook_payment_service"
 require_relative "defra_ruby_govpay/services/govpay_webhook_refund_service"
 require_relative "defra_ruby_govpay/services/govpay_webhook_sanitizer_service"
-require_relative "defra_ruby_govpay/govpay_webhook_job"
 
 # The DefraRubyGovpay module facilitates integration with Govpay services.
 # It provides a convenient and configurable way to interact with Govpay APIs in Defra's ruby applications.

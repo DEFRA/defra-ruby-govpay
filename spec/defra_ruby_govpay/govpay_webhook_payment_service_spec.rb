@@ -79,9 +79,13 @@ RSpec.describe DefraRubyGovpay::GovpayWebhookPaymentService do
         webhook_body["resource"]["moto"] = true
       end
 
-      it "processes the payment successfully" do
-        result = service.run(webhook_body)
+      let(:result) { service.run(webhook_body) }
+
+      it "extracts the correct payment ID" do
         expect(result[:id]).to eq("hu20sqlact5260q2nanm0q8u93")
+      end
+
+      it "extracts the correct payment status" do
         expect(result[:status]).to eq("submitted")
       end
     end

@@ -3,7 +3,7 @@
 require "spec_helper"
 
 RSpec.describe DefraRubyGovpay::GovpayWebhookRefundService do
-  it_behaves_like "govpay webhook block yielding", :refund
+  it_behaves_like "govpay webhook data extraction", :refund
   describe "#run" do
     let(:service) { described_class.new }
     let(:fixture_file) { File.read("spec/fixtures/files/webhook_refund_update_body.json") }

@@ -80,76 +80,58 @@ end
 
 ## Webhook Handling
 
-The gem provides functionality for handling Gov.UK Pay webhooks for both payments and refunds.
-
-#### Application-Specific Logic
-
-The `run` method of the `GovpayWebhookPaymentService` and
-`GovpayWebhookRefundService` classes accepts a block that allows you to define
-application-specific logic for processing the webhook data. This is where you
-can update your application's database or perform any other necessary actions
-based on the webhook data.
-
-The block receives a hash with the following keys:
-- `id`: The payment or refund ID
-- `status`: The new status
-- `type`: Either "payment" or "refund"
-- `webhook_body`: The full webhook body for additional processing
-
-They then return a hash containing the extracted data from the webhook.
+The gem provides functionality for handling Gov.UK Pay webhooks for both payments and refunds. The webhook services process the webhook data and return structured information that your application can use to update its records.
 
 ### Processing Webhooks
 
-We recommend creating application-specific handler classes to encapsulate your business logic, while keeping your webhook job clean and focused on routing:
-
-```ruby
-# app/services/your_app/govpay_payment_handler.rb
-module YourApp
-  class GovpayPaymentHandler
-    def self.process(webhook_body)
-      DefraRubyGovpay::GovpayWebhookPaymentService.run(webhook_body) do |args|
-        # App-specific payment update logic
-        payment = Payment.find_by(govpay_id: args[:id])
-
-        if payment.present?
-          payment.update(status: args[:status])
-          # Additional application-specific logic here
-        else
-          Rails.logger.error "Payment not found for govpay_id: #{args[:id]}"
-        end
-      end
-    end
-  end
-end
-
-# app/services/your_app/govpay_refund_handler.rb
-module YourApp
-  class GovpayRefundHandler
-    def self.process(webhook_body)
-      DefraRubyGovpay::GovpayWebhookRefundService.run(webhook_body) do |args|
-        # App-specific refund update logic
-        refund = Refund.find_by(govpay_id: args[:id])
-
-        if refund.present?
-          refund.update(status: args[:status])
-          # Additional application-specific logic here
-        else
-          Rails.logger.error "Refund not found for govpay_id: #{args[:id]}"
-        end
-      end
-    end
-  end
-end
-```
+The webhook services extract and return data from the webhook payload:
 
 ```ruby
 # For payment webhooks
-webhook_data = DefraRubyGovpay::GovpayWebhookPaymentService.run(webhook_body) do |args|
-  # Application-specific logic to update payment status
-  payment = Payment.find_by(govpay_id: args[:id])
-  payment&.update(status: args[:status])
-  # You can access the full webhook body with args[:webhook_body]
-  # and determine the type with args[:type] ("payment" or "refund")
+result = DefraRubyGovpay::GovpayWebhookPaymentService.run(webhook_body)
+# => { id: "hu20sqlact5260q2nanm0q8u93", status: "success" }
+
+# For refund webhooks
+result = DefraRubyGovpay::GovpayWebhookRefundService.run(webhook_body)
+# => { id: "789", payment_id: "original-payment-123", status: "success", amount: 2000, created_date: "2022-01-26T16:52:41.178Z" }
+```
+
+Your application should create webhook handler classes that use these services to process webhooks. The handlers should:
+
+1. Call the appropriate webhook service to extract data
+2. Find the relevant payment or refund in your application
+3. Update the status of the payment or refund
+4. Perform any additional application-specific logic
+
+This approach keeps the webhook handling logic clean and maintainable, with a clear separation of concerns between the gem and your application.
+
+# app/jobs/your_app/govpay_webhook_job.rb
+module YourApp
+  class GovpayWebhookJob < ApplicationJob
+    def perform(webhook_body)
+      if webhook_body["resource_type"]&.downcase == "payment"
+        process_payment_webhook(webhook_body)
+      elsif webhook_body["refund_id"].present?
+        process_refund_webhook(webhook_body)
+      else
+        raise ArgumentError, "Unrecognised Govpay webhook type"
+      end
+    rescue StandardError => e
+      # Handle errors
+    end
+
+    private
+
+    def process_payment_webhook(webhook_body)
+      result = GovpayPaymentHandler.process(webhook_body)
+      Rails.logger.info "Processed payment webhook for payment_id: #{result[:payment_id]}, status: #{result[:status]}"
+    end
+
+    def process_refund_webhook(webhook_body)
+      result = GovpayRefundHandler.process(webhook_body)
+      Rails.logger.info "Processed refund webhook for refund_id: #{result[:payment_id]}, status: #{result[:status]}"
+    end
+  end
 end
 ```
 

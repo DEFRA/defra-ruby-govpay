@@ -23,9 +23,7 @@ module DefraRubyGovpay
       validate_webhook_body
 
       # If we have a previous status and it's different from the current one, validate the transition
-      if previous_status && previous_status != webhook_payment_or_refund_status
-        validate_status_transition
-      end
+      validate_status_transition if previous_status && previous_status != webhook_payment_or_refund_status
 
       # Extract and return data from webhook
       extract_data_from_webhook
@@ -43,7 +41,7 @@ module DefraRubyGovpay
     def extract_data_from_webhook
       {
         id: webhook_payment_or_refund_id,
-        status: webhook_payment_or_refund_status,
+        status: webhook_payment_or_refund_status
       }
     end
 

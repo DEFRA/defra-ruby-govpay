@@ -19,7 +19,7 @@ RSpec.configure do |config|
     c.syntax = :expect
   end
 
-  Dir[File.join(__dir__, "support/**/*.rb")].sort.each { |f| require f }
+  Dir[File.join(__dir__, "support/**/*.rb")].each { |f| require f }
 
   # The default logger for this gem writes to console. Redirect here to avoid cluttering rspec output.
   original_stderr = $stderr

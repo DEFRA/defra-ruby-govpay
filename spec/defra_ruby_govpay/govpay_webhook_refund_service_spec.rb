@@ -18,13 +18,6 @@ RSpec.describe DefraRubyGovpay::GovpayWebhookRefundService do
           status: "success"
         )
       end
-
-      it "extracts refund details" do
-        expect(result).to include(
-          amount: 2000,
-          created_date: "2022-01-26T16:52:41.178Z"
-        )
-      end
     end
 
     context "with invalid webhook" do

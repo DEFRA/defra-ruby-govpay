@@ -43,8 +43,6 @@ module DefraRubyGovpay
       # Add refund-specific data
       data.merge!(
         payment_id: webhook_payment_id,
-        amount: webhook_body["amount"],
-        created_date: webhook_body["created_date"]
       )
 
       data

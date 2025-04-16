@@ -93,7 +93,7 @@ result = DefraRubyGovpay::GovpayWebhookPaymentService.run(webhook_body)
 
 # For refund webhooks
 result = DefraRubyGovpay::GovpayWebhookRefundService.run(webhook_body)
-# => { id: "789", payment_id: "original-payment-123", status: "success", amount: 2000, created_date: "2022-01-26T16:52:41.178Z" }
+# => { id: "789", payment_id: "original-payment-123", status: "success" }
 ```
 
 Your application should create webhook handler classes that use these services to process webhooks. The handlers should:

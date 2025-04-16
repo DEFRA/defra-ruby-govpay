@@ -40,9 +40,8 @@ module DefraRubyGovpay
     def extract_data_from_webhook
       data = super
 
-      # Add refund-specific data
       data.merge!(
-        payment_id: webhook_payment_id,
+        payment_id: webhook_payment_id
       )
 
       data

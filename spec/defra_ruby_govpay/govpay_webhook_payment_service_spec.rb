@@ -18,34 +18,6 @@ RSpec.describe DefraRubyGovpay::GovpayWebhookPaymentService do
           status: "submitted"
         )
       end
-
-      it "extracts amount" do
-        expect(result).to include(
-          amount: 5000
-        )
-      end
-
-      it "extracts payment description and reference" do
-        expect(result).to include(
-          description: "Pay your council tax",
-          reference: "12345"
-        )
-      end
-
-      it "extracts payment date and moto flag" do
-        expect(result).to include(
-          created_date: "2021-10-19T10:05:45.454Z",
-          moto: false
-        )
-      end
-
-      it "extracts refund summary information" do
-        expect(result[:refund_summary]).to include(
-          status: "pending",
-          amount_available: 5000,
-          amount_submitted: 0
-        )
-      end
     end
 
     context "with invalid webhook type" do

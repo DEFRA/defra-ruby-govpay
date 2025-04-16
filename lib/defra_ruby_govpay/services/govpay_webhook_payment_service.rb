@@ -38,30 +38,5 @@ module DefraRubyGovpay
     def webhook_payment_or_refund_status
       @webhook_payment_or_refund_status ||= webhook_body.dig("resource", "state", "status")
     end
-
-    def extract_data_from_webhook
-      data = super
-
-      # Add payment-specific data
-      data.merge!(
-        amount: webhook_body.dig("resource", "amount"),
-        description: webhook_body.dig("resource", "description"),
-        reference: webhook_body.dig("resource", "reference"),
-        created_date: webhook_body.dig("resource", "created_date"),
-        moto: webhook_body.dig("resource", "moto") || false
-      )
-
-      # Add refund summary if present
-      refund_summary = webhook_body.dig("resource", "refund_summary")
-      if refund_summary && !refund_summary.to_s.strip.empty?
-        data[:refund_summary] = {
-          status: webhook_body.dig("resource", "refund_summary", "status"),
-          amount_available: webhook_body.dig("resource", "refund_summary", "amount_available"),
-          amount_submitted: webhook_body.dig("resource", "refund_summary", "amount_submitted")
-        }
-      end
-
-      data
-    end
   end
 end

@@ -41,7 +41,8 @@ module DefraRubyGovpay
     def extract_data_from_webhook
       {
         id: webhook_payment_or_refund_id,
-        status: webhook_payment_or_refund_status
+        status: webhook_payment_or_refund_status,
+        webhook_body: webhook_body
       }
     end
 

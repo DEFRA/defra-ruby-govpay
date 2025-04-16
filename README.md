@@ -80,7 +80,7 @@ end
 
 ## Webhook Handling
 
-The gem provides functionality for handling Gov.UK Pay webhooks for both payments and refunds. The webhook services process the webhook data and return structured information that your application can use to update its records.
+The gem provides functionality for handling Govpay webhooks for both payments and refunds. The webhook services validate the webhook content, that the status transition is allowed, return structured information that your application can use to update its records.
 
 ### Processing Webhooks
 
@@ -94,45 +94,6 @@ result = DefraRubyGovpay::GovpayWebhookPaymentService.run(webhook_body)
 # For refund webhooks
 result = DefraRubyGovpay::GovpayWebhookRefundService.run(webhook_body)
 # => { id: "789", payment_id: "original-payment-123", status: "success" }
-```
-
-Your application should create webhook handler classes that use these services to process webhooks. The handlers should:
-
-1. Call the appropriate webhook service to extract data
-2. Find the relevant payment or refund in your application
-3. Update the status of the payment or refund
-4. Perform any additional application-specific logic
-
-This approach keeps the webhook handling logic clean and maintainable, with a clear separation of concerns between the gem and your application.
-
-# app/jobs/your_app/govpay_webhook_job.rb
-module YourApp
-  class GovpayWebhookJob < ApplicationJob
-    def perform(webhook_body)
-      if webhook_body["resource_type"]&.downcase == "payment"
-        process_payment_webhook(webhook_body)
-      elsif webhook_body["refund_id"].present?
-        process_refund_webhook(webhook_body)
-      else
-        raise ArgumentError, "Unrecognised Govpay webhook type"
-      end
-    rescue StandardError => e
-      # Handle errors
-    end
-
-    private
-
-    def process_payment_webhook(webhook_body)
-      result = GovpayPaymentHandler.process(webhook_body)
-      Rails.logger.info "Processed payment webhook for payment_id: #{result[:payment_id]}, status: #{result[:status]}"
-    end
-
-    def process_refund_webhook(webhook_body)
-      result = GovpayRefundHandler.process(webhook_body)
-      Rails.logger.info "Processed refund webhook for refund_id: #{result[:payment_id]}, status: #{result[:status]}"
-    end
-  end
-end
 ```
 
 ### Validating Webhook Signatures

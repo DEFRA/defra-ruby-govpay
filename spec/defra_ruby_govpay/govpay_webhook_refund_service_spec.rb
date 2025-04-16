@@ -14,14 +14,13 @@ RSpec.describe DefraRubyGovpay::GovpayWebhookRefundService do
 
       it "extracts basic refund information" do
         expect(result).to include(
-          payment_id: "789",
+          id: "345",
           status: "success"
         )
       end
 
       it "extracts refund details" do
         expect(result).to include(
-          service_type: "front_office",
           amount: 2000,
           created_date: "2022-01-26T16:52:41.178Z"
         )

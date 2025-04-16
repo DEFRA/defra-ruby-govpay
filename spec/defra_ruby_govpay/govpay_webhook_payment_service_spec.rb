@@ -14,14 +14,13 @@ RSpec.describe DefraRubyGovpay::GovpayWebhookPaymentService do
 
       it "extracts basic payment information" do
         expect(result).to include(
-          payment_id: "hu20sqlact5260q2nanm0q8u93",
+          id: "hu20sqlact5260q2nanm0q8u93",
           status: "submitted"
         )
       end
 
-      it "extracts service type and amount" do
+      it "extracts amount" do
         expect(result).to include(
-          service_type: "front_office",
           amount: 5000
         )
       end
@@ -80,9 +79,10 @@ RSpec.describe DefraRubyGovpay::GovpayWebhookPaymentService do
         webhook_body["resource"]["moto"] = true
       end
 
-      it "identifies the service type as back_office" do
+      it "processes the payment successfully" do
         result = service.run(webhook_body)
-        expect(result[:service_type]).to eq("back_office")
+        expect(result[:id]).to eq("hu20sqlact5260q2nanm0q8u93")
+        expect(result[:status]).to eq("submitted")
       end
     end
 

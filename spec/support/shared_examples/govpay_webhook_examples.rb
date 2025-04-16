@@ -38,16 +38,15 @@ RSpec.shared_examples "govpay webhook data extraction" do |service_type|
 
     it "extracts and returns the correct data" do
       result = described_class.run(webhook_body)
-      # For refunds, the service returns the payment_id from the webhook, not the refund_id
-      expect(result).to include( payment_id: expected_id, status: resource_status)
+      # The service returns the id (payment_id or refund_id) and status
+      expect(result).to include(id: resource_id, status: resource_status)
     end
 
-    it "includes service type in the result" do
+    it "includes payment_id in the result for refunds" do
+      next unless service_type == :refund
+
       result = described_class.run(webhook_body)
-
-      expected_service_type = webhook_body.dig("resource", "moto") ? "back_office" : "front_office"
-
-      expect(result).to include(service_type: expected_service_type)
+      expect(result).to include(payment_id: webhook_body["payment_id"])
     end
   end
 end

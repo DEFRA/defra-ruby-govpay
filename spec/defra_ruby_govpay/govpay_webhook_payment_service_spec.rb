@@ -64,27 +64,15 @@ RSpec.describe DefraRubyGovpay::GovpayWebhookPaymentService do
 
     # Split the nested contexts to reduce nesting depth
     describe "status transition validation" do
-      let(:service_with_valid_transition) { described_class.new }
-
-      before do
-        service_with_valid_transition.previous_status = "created"
-      end
-
       it "allows valid transitions" do
-        expect { service_with_valid_transition.run(webhook_body) }.not_to raise_error
+        expect { described_class.run(webhook_body, previous_status: "created") }.not_to raise_error
       end
     end
 
     # Separate describe block for invalid transition tests to reduce nesting
     describe "invalid status transition" do
-      let(:service_with_invalid_transition) { described_class.new }
-
-      before do
-        service_with_invalid_transition.previous_status = "success"
-      end
-
       it "raises InvalidGovpayStatusTransition" do
-        expect { service_with_invalid_transition.run(webhook_body) }.to raise_error(
+        expect { described_class.run(webhook_body, previous_status: "success") }.to raise_error(
           DefraRubyGovpay::GovpayWebhookBaseService::InvalidGovpayStatusTransition,
           "Invalid payment status transition from success to submitted"
         )

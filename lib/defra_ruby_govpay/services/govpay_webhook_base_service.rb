@@ -11,16 +11,17 @@ module DefraRubyGovpay
     # override this in subclasses
     VALID_STATUS_TRANSITIONS = {}.freeze
 
-    def self.run(webhook_body)
-      new.run(webhook_body)
+    def self.run(webhook_body, previous_status: nil)
+      new.run(webhook_body, previous_status: previous_status)
     end
 
     def initialize
       # No initialization needed
     end
 
-    def run(webhook_body)
+    def run(webhook_body, previous_status: nil)
       @webhook_body = webhook_body
+      @previous_status = previous_status
 
       validate_webhook_body
 

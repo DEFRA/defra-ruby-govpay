@@ -22,7 +22,7 @@ module DefraRubyGovpay
     def validate_webhook_body
       raise ArgumentError, "Invalid webhook type #{webhook_resource_type}" unless webhook_resource_type == "payment"
 
-      return if webhook_payment_or_refund_status && !webhook_payment_or_refund_status.to_s.strip.empty?
+      return unless webhook_payment_or_refund_status.blank?
 
       raise ArgumentError, "Webhook body missing payment status: #{webhook_body}"
     end
@@ -37,6 +37,10 @@ module DefraRubyGovpay
 
     def webhook_payment_or_refund_status
       @webhook_payment_or_refund_status ||= webhook_body.dig("resource", "state", "status")
+    end
+
+    def log_webhook_context
+      "for payment #{webhook_payment_or_refund_id}"
     end
   end
 end

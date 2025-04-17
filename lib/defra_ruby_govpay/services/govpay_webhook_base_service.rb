@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require "active_support/core_ext/object/blank"
+
 module DefraRubyGovpay
   class GovpayWebhookBaseService
     class InvalidGovpayStatusTransition < StandardError; end
@@ -23,7 +25,14 @@ module DefraRubyGovpay
       validate_webhook_body
 
       # If we have a previous status and it's different from the current one, validate the transition
-      validate_status_transition if previous_status && previous_status != webhook_payment_or_refund_status
+      if previous_status && previous_status != webhook_payment_or_refund_status
+        validate_status_transition
+      else
+        DefraRubyGovpay.logger.warn(
+          "Status \"#{@previous_status}\" unchanged in #{payment_or_refund_str} webhook update " \
+          "#{log_webhook_context}"
+        )
+      end
 
       # Extract and return data from webhook
       extract_data_from_webhook
@@ -60,6 +69,10 @@ module DefraRubyGovpay
     end
 
     def webhook_payment_or_refund_status
+      raise NotImplementedError
+    end
+
+    def log_webhook_context
       raise NotImplementedError
     end
   end

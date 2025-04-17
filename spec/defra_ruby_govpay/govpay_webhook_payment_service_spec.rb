@@ -64,6 +64,20 @@ RSpec.describe DefraRubyGovpay::GovpayWebhookPaymentService do
       end
     end
 
+    context "when the resource_type has different casings" do
+      shared_examples "handles case-insensitive resource_type as payment" do |resource_type_value|
+        before do
+          webhook_body["resource_type"] = resource_type_value
+        end
+
+        it_behaves_like "valid and invalid transitions", "created", %w[started submitted success failed cancelled error], []
+      end
+
+      %w[payment PAYMENT].each do |case_variant|
+        it_behaves_like "handles case-insensitive resource_type as payment", case_variant
+      end
+    end
+
     describe "status transition validation" do
       it_behaves_like "valid and invalid transitions", "created",
                       %w[started submitted success failed cancelled error],

@@ -4,6 +4,8 @@ require "spec_helper"
 
 RSpec.describe DefraRubyGovpay::GovpayWebhookPaymentService do
   it_behaves_like "govpay webhook data extraction", :payment
+  it_behaves_like "govpay status transitions", :payment
+
   describe "#run" do
     let(:service) { described_class.new }
     let(:fixture_file) { File.read("spec/fixtures/files/webhook_payment_update_body.json") }
@@ -62,21 +64,23 @@ RSpec.describe DefraRubyGovpay::GovpayWebhookPaymentService do
       end
     end
 
-    # Split the nested contexts to reduce nesting depth
     describe "status transition validation" do
-      it "allows valid transitions" do
-        expect { described_class.run(webhook_body, previous_status: "created") }.not_to raise_error
-      end
-    end
+      it_behaves_like "valid and invalid transitions", "created",
+                      %w[started submitted success failed cancelled error],
+                      []
 
-    # Separate describe block for invalid transition tests to reduce nesting
-    describe "invalid status transition" do
-      it "raises InvalidGovpayStatusTransition" do
-        expect { described_class.run(webhook_body, previous_status: "success") }.to raise_error(
-          DefraRubyGovpay::GovpayWebhookBaseService::InvalidGovpayStatusTransition,
-          "Invalid payment status transition from success to submitted"
-        )
-      end
+      it_behaves_like "valid and invalid transitions", "started",
+                      %w[submitted success failed cancelled error],
+                      %w[created]
+
+      it_behaves_like "valid and invalid transitions", "submitted",
+                      %w[success failed cancelled error],
+                      %w[created started]
+
+      it_behaves_like "no valid transitions", "success"
+      it_behaves_like "no valid transitions", "failed"
+      it_behaves_like "no valid transitions", "cancelled"
+      it_behaves_like "no valid transitions", "error"
     end
   end
 end

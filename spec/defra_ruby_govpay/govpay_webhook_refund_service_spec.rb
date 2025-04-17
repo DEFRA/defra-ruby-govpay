@@ -4,6 +4,8 @@ require "spec_helper"
 
 RSpec.describe DefraRubyGovpay::GovpayWebhookRefundService do
   it_behaves_like "govpay webhook data extraction", :refund
+  it_behaves_like "govpay status transitions", :refund
+
   describe "#run" do
     let(:service) { described_class.new }
     let(:fixture_file) { File.read("spec/fixtures/files/webhook_refund_update_body.json") }
@@ -34,18 +36,12 @@ RSpec.describe DefraRubyGovpay::GovpayWebhookRefundService do
     end
 
     describe "status transition validation" do
-      it "allows valid transitions" do
-        expect { described_class.run(webhook_body, previous_status: "submitted") }.not_to raise_error
-      end
-    end
+      it_behaves_like "valid and invalid transitions", "submitted",
+                      %w[success],
+                      %w[error]
 
-    describe "invalid status transition" do
-      it "raises InvalidGovpayStatusTransition" do
-        expect { described_class.run(webhook_body, previous_status: "error") }.to raise_error(
-          DefraRubyGovpay::GovpayWebhookBaseService::InvalidGovpayStatusTransition,
-          "Invalid refund status transition from error to success"
-        )
-      end
+      it_behaves_like "no valid transitions", "success"
+      it_behaves_like "no valid transitions", "error"
     end
   end
 end

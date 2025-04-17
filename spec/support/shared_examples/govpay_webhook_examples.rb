@@ -38,7 +38,6 @@ RSpec.shared_examples "govpay webhook data extraction" do |service_type|
 
     it "extracts and returns the correct data" do
       result = described_class.run(webhook_body)
-      # The service returns the id (payment_id or refund_id) and status
       expect(result).to include(id: resource_id, status: resource_status)
     end
 

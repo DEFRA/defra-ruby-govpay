@@ -45,7 +45,8 @@ module DefraRubyGovpay
       return if self.class::VALID_STATUS_TRANSITIONS[previous_status]&.include?(webhook_payment_or_refund_status)
 
       raise InvalidGovpayStatusTransition, "Invalid #{payment_or_refund_str} status transition " \
-                                           "from #{previous_status} to #{webhook_payment_or_refund_status}"
+                                           "from #{previous_status} to #{webhook_payment_or_refund_status}" \
+                                           "#{log_webhook_context}"
     end
 
     def extract_data_from_webhook

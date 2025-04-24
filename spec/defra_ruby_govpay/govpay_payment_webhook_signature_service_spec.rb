@@ -2,6 +2,7 @@
 
 require "spec_helper"
 
+# rubocop:disable RSpec/MultipleMemoizedHelpers
 module DefraRubyGovpay
   RSpec.describe GovpayWebhookSignatureService do
     describe ".run" do
@@ -35,10 +36,12 @@ module DefraRubyGovpay
         let(:valid_front_office_signature) { OpenSSL::HMAC.hexdigest(digest, front_office_secret, webhook_body) }
         let(:valid_back_office_signature) { OpenSSL::HMAC.hexdigest(digest, back_office_secret, webhook_body) }
 
-        it "returns correct signatures for both front office and back office" do
-          result = run_service
-          expect(result[:front_office]).to eq valid_front_office_signature
-          expect(result[:back_office]).to eq valid_back_office_signature
+        it "returns correct signature for front office" do
+          expect(run_service[:front_office]).to eq valid_front_office_signature
+        end
+
+        it "returns correct signature for back office" do
+          expect(run_service[:back_office]).to eq valid_back_office_signature
         end
 
         it "does not raise an error" do
@@ -48,3 +51,4 @@ module DefraRubyGovpay
     end
   end
 end
+# rubocop:enable RSpec/MultipleMemoizedHelpers

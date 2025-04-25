@@ -24,10 +24,13 @@ RSpec.shared_examples "govpay status transitions" do
 
   describe "status transition validation" do
     context "when status hasn't changed" do
+      # rubocop:disable RSpec/NoExpectationExample
       it "logs a warning but doesn't raise an error" do
         allow(DefraRubyGovpay.logger).to receive(:warn)
         run_and_expect_warning_for_unchanged_status
       end
+
+      # rubocop:enable RSpec/NoExpectationExample
 
       def run_and_expect_warning_for_unchanged_status
         current_status = if resource_type == :payment
@@ -35,6 +38,7 @@ RSpec.shared_examples "govpay status transitions" do
                          else
                            webhook_body["status"]
                          end
+
         service_class.run(webhook_body, previous_status: current_status)
         expect(DefraRubyGovpay.logger).to have_received(:warn).with(/Status .* unchanged/)
       end

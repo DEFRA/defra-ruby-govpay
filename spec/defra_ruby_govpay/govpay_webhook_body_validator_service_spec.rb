@@ -5,15 +5,11 @@ require "spec_helper"
 RSpec.describe DefraRubyGovpay::GovpayWebhookBodyValidatorService do
   describe ".run" do
 
-    let(:headers) { "Pay-Signature" => signature }
+    subject(:run_service) { described_class.run(body: webhook_body, signature:) }
+
     let(:webhook_body) { file_fixture("files/webhook_payment_update_body.json") }
-    let(:webhook_signing_secret) { ENV.fetch("WCRS_GOVPAY_CALLBACK_WEBHOOK_SIGNING_SECRET") }
-    let(:digest) { OpenSSL::Digest.new("sha256") }
     let(:valid_signature) { SecureRandom.hex(10) }
     let(:signature_service) { instance_double(DefraRubyGovpay::GovpayWebhookSignatureService) }
-    let(:signature) { nil }
-
-    subject(:run_service) { described_class.run(body: webhook_body, signature:) }
 
     before do
       allow(DefraRubyGovpay::GovpayWebhookSignatureService).to receive(:new).and_return(signature_service)

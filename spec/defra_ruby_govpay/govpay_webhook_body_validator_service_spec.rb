@@ -8,12 +8,16 @@ RSpec.describe DefraRubyGovpay::GovpayWebhookBodyValidatorService do
     subject(:run_service) { described_class.run(body: webhook_body, signature:) }
 
     let(:webhook_body) { file_fixture("files/webhook_payment_update_body.json") }
-    let(:valid_signature) { SecureRandom.hex(10) }
+    let(:valid_front_office_signature) { SecureRandom.hex(10) }
+    let(:valid_back_office_signature) { SecureRandom.hex(10) }
     let(:signature_service) { instance_double(DefraRubyGovpay::GovpayWebhookSignatureService) }
 
     before do
       allow(DefraRubyGovpay::GovpayWebhookSignatureService).to receive(:new).and_return(signature_service)
-      allow(signature_service).to receive(:run).and_return(valid_signature)
+      allow(signature_service).to receive(:run).and_return(
+        front_office: valid_front_office_signature,
+        back_office: valid_back_office_signature
+      )
     end
 
     shared_examples "fails validation" do
@@ -34,12 +38,22 @@ RSpec.describe DefraRubyGovpay::GovpayWebhookBodyValidatorService do
       it_behaves_like "fails validation"
     end
 
-    context "with a valid signature" do
-      let(:signature) { valid_signature }
+    context "with a valid front office signature" do
+      let(:signature) { valid_front_office_signature }
 
       it { expect(run_service).to be true }
 
-      it "does not report an error" do
+      it "does not error" do
+        expect { run_service }.not_to raise_error
+      end
+    end
+
+    context "with a valid back office signature" do
+      let(:signature) { valid_back_office_signature }
+
+      it { expect(run_service).to be true }
+
+      it "does not error" do
         expect { run_service }.not_to raise_error
       end
     end

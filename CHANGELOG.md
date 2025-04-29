@@ -1,12 +1,48 @@
 # Changelog
 
-## [Unreleased](https://github.com/DEFRA/defra-ruby-govpay/tree/HEAD)
+## [v0.2.8](https://github.com/DEFRA/defra-ruby-govpay/tree/v0.2.8) (2025-04-29)
 
-[Full Changelog](https://github.com/DEFRA/defra-ruby-govpay/compare/v0.2.4...HEAD)
+[Full Changelog](https://github.com/DEFRA/defra-ruby-govpay/compare/v0.2.7...v0.2.8)
+
+**Implemented enhancements:**
+
+- RUBY 3757 wcr tech move govpay webhook handling to the govpay gem [\#32](https://github.com/DEFRA/defra-ruby-govpay/pull/32) ([jjromeo](https://github.com/jjromeo))
+
+## [v0.2.7](https://github.com/DEFRA/defra-ruby-govpay/tree/v0.2.7) (2025-04-28)
+
+[Full Changelog](https://github.com/DEFRA/defra-ruby-govpay/compare/v0.2.6...v0.2.7)
+
+**Implemented enhancements:**
+
+- \[RUBY-3757\] Add signature service to defra ruby govpay [\#30](https://github.com/DEFRA/defra-ruby-govpay/pull/30) ([jjromeo](https://github.com/jjromeo))
+
+**Merged pull requests:**
+
+- Bump version to 0.2.7 [\#31](https://github.com/DEFRA/defra-ruby-govpay/pull/31) ([jjromeo](https://github.com/jjromeo))
+
+## [v0.2.6](https://github.com/DEFRA/defra-ruby-govpay/tree/v0.2.6) (2025-04-23)
+
+[Full Changelog](https://github.com/DEFRA/defra-ruby-govpay/compare/v0.2.5...v0.2.6)
+
+**Implemented enhancements:**
+
+- RUBY 3757 wcr tech move govpay webhook handling to the govpay gem [\#28](https://github.com/DEFRA/defra-ruby-govpay/pull/28) ([jjromeo](https://github.com/jjromeo))
+
+**Merged pull requests:**
+
+- Bump version to 0.2.6 for release \(on main\) [\#29](https://github.com/DEFRA/defra-ruby-govpay/pull/29) ([jjromeo](https://github.com/jjromeo))
+
+## [v0.2.5](https://github.com/DEFRA/defra-ruby-govpay/tree/v0.2.5) (2023-11-16)
+
+[Full Changelog](https://github.com/DEFRA/defra-ruby-govpay/compare/v0.2.4...v0.2.5)
 
 **Fixed bugs:**
 
-- fix host\_is\_back\_office [\#11](https://github.com/DEFRA/defra-ruby-govpay/pull/11) ([PaulDoyle-DEFRA](https://github.com/PaulDoyle-DEFRA))
+- fix host\_is\_back\_office [\#11](https://github.com/DEFRA/defra-ruby-govpay/pull/11) ([PaulDoyle-EA](https://github.com/PaulDoyle-EA))
+
+**Merged pull requests:**
+
+- Version 0.2.5 [\#12](https://github.com/DEFRA/defra-ruby-govpay/pull/12) ([PaulDoyle-EA](https://github.com/PaulDoyle-EA))
 
 ## [v0.2.4](https://github.com/DEFRA/defra-ruby-govpay/tree/v0.2.4) (2023-11-10)
 
@@ -14,11 +50,11 @@
 
 **Fixed bugs:**
 
-- fix DefraRubyGovpay config [\#9](https://github.com/DEFRA/defra-ruby-govpay/pull/9) ([PaulDoyle-DEFRA](https://github.com/PaulDoyle-DEFRA))
+- fix DefraRubyGovpay config [\#9](https://github.com/DEFRA/defra-ruby-govpay/pull/9) ([PaulDoyle-EA](https://github.com/PaulDoyle-EA))
 
 **Merged pull requests:**
 
-- Version 0.2.4 [\#10](https://github.com/DEFRA/defra-ruby-govpay/pull/10) ([PaulDoyle-DEFRA](https://github.com/PaulDoyle-DEFRA))
+- Version 0.2.4 [\#10](https://github.com/DEFRA/defra-ruby-govpay/pull/10) ([PaulDoyle-EA](https://github.com/PaulDoyle-EA))
 - Bump rake from 13.0.6 to 13.1.0 [\#6](https://github.com/DEFRA/defra-ruby-govpay/pull/6) ([dependabot[bot]](https://github.com/apps/dependabot))
 
 ## [v0.2.3](https://github.com/DEFRA/defra-ruby-govpay/tree/v0.2.3) (2023-11-07)
@@ -27,7 +63,7 @@
 
 **Implemented enhancements:**
 
-- Chore/ruby 2769 enhance govpay logging [\#8](https://github.com/DEFRA/defra-ruby-govpay/pull/8) ([PaulDoyle-DEFRA](https://github.com/PaulDoyle-DEFRA))
+- Chore/ruby 2769 enhance govpay logging [\#8](https://github.com/DEFRA/defra-ruby-govpay/pull/8) ([PaulDoyle-EA](https://github.com/PaulDoyle-EA))
 
 ## [v0.2.2](https://github.com/DEFRA/defra-ruby-govpay/tree/v0.2.2) (2023-11-06)
 
@@ -35,8 +71,8 @@
 
 **Implemented enhancements:**
 
-- gem version 0.2.2 [\#7](https://github.com/DEFRA/defra-ruby-govpay/pull/7) ([PaulDoyle-DEFRA](https://github.com/PaulDoyle-DEFRA))
-- Chore/ruby 2769 enhance govpay logging [\#5](https://github.com/DEFRA/defra-ruby-govpay/pull/5) ([PaulDoyle-DEFRA](https://github.com/PaulDoyle-DEFRA))
+- gem version 0.2.2 [\#7](https://github.com/DEFRA/defra-ruby-govpay/pull/7) ([PaulDoyle-EA](https://github.com/PaulDoyle-EA))
+- Chore/ruby 2769 enhance govpay logging [\#5](https://github.com/DEFRA/defra-ruby-govpay/pull/5) ([PaulDoyle-EA](https://github.com/PaulDoyle-EA))
 
 ## [v0.2.1](https://github.com/DEFRA/defra-ruby-govpay/tree/v0.2.1) (2023-10-03)
 
@@ -53,11 +89,18 @@
 **Merged pull requests:**
 
 - release/v0.1.2 [\#4](https://github.com/DEFRA/defra-ruby-govpay/pull/4) ([jjromeo](https://github.com/jjromeo))
-- gem version 0.1.0 [\#1](https://github.com/DEFRA/defra-ruby-govpay/pull/1) ([jjromeo](https://github.com/jjromeo))
 
 ## [v0.1.1](https://github.com/DEFRA/defra-ruby-govpay/tree/v0.1.1) (2023-09-18)
 
-[Full Changelog](https://github.com/DEFRA/defra-ruby-govpay/compare/1bd9ccaffdb51137f980d553336b5dddf2f4901d...v0.1.1)
+[Full Changelog](https://github.com/DEFRA/defra-ruby-govpay/compare/v0.1.0...v0.1.1)
+
+## [v0.1.0](https://github.com/DEFRA/defra-ruby-govpay/tree/v0.1.0) (2023-09-18)
+
+[Full Changelog](https://github.com/DEFRA/defra-ruby-govpay/compare/1bd9ccaffdb51137f980d553336b5dddf2f4901d...v0.1.0)
+
+**Merged pull requests:**
+
+- gem version 0.1.0 [\#1](https://github.com/DEFRA/defra-ruby-govpay/pull/1) ([jjromeo](https://github.com/jjromeo))
 
 
 

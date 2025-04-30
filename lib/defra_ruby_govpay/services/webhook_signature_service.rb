@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module DefraRubyGovpay
-  class GovpayWebhookSignatureService
+  class WebhookSignatureService
     class DigestFailure < StandardError; end
 
     def self.run(body:)
@@ -11,7 +11,7 @@ module DefraRubyGovpay
     def run(body:)
       generate_signatures(body.to_s)
     rescue StandardError => e
-      DefraRubyGovpay.logger.error "Govpay payment webhook signature generation failed: #{e}"
+      DefraRubyGovpay.logger.error "Payment webhook signature generation failed: #{e}"
       raise DigestFailure, e
     end
 

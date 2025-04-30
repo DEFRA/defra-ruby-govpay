@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module DefraRubyGovpay
-  class GovpayWebhookRefundService < GovpayWebhookBaseService
+  class WebhookRefundService < WebhookBaseService
 
     VALID_STATUS_TRANSITIONS = {
       "submitted" => %w[success],

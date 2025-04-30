@@ -88,11 +88,11 @@ The webhook services extract and return data from the webhook payload:
 
 ```ruby
 # For payment webhooks
-result = DefraRubyGovpay::GovpayWebhookPaymentService.run(webhook_body)
+result = DefraRubyGovpay::WebhookPaymentService.run(webhook_body)
 # => { id: "hu20sqlact5260q2nanm0q8u93", status: "success" }
 
 # For refund webhooks
-result = DefraRubyGovpay::GovpayWebhookRefundService.run(webhook_body)
+result = DefraRubyGovpay::WebhookRefundService.run(webhook_body)
 # => { id: "789", payment_id: "original-payment-123", status: "success" }
 ```
 
@@ -123,8 +123,8 @@ The gem can handle both payment and refund webhooks:
 
 The appropriate service class will be used based on the webhook type:
 
-- `GovpayWebhookPaymentService` for payment webhooks
-- `GovpayWebhookRefundService` for refund webhooks
+- `WebhookPaymentService` for payment webhooks
+- `WebhookRefundService` for refund webhooks
 
 ## Testing
 

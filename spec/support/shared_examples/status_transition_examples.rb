@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
-RSpec.shared_examples "govpay status transitions" do
+RSpec.shared_examples "status transitions" do
   let(:service_class) { described_class }
-  let(:resource_type) { service_class == DefraRubyGovpay::GovpayWebhookPaymentService ? :payment : :refund }
+  let(:resource_type) { service_class == DefraRubyGovpay::WebhookPaymentService ? :payment : :refund }
 
   let(:fixture_file) do
     if resource_type == :payment
@@ -48,7 +48,7 @@ end
 
 RSpec.shared_examples "a valid transition" do |old_status, new_status|
   let(:service_class) { described_class }
-  let(:resource_type) { service_class == DefraRubyGovpay::GovpayWebhookPaymentService ? :payment : :refund }
+  let(:resource_type) { service_class == DefraRubyGovpay::WebhookPaymentService ? :payment : :refund }
 
   let(:fixture_file) do
     if resource_type == :payment
@@ -76,7 +76,7 @@ end
 
 RSpec.shared_examples "an invalid transition" do |old_status, new_status|
   let(:service_class) { described_class }
-  let(:resource_type) { service_class == DefraRubyGovpay::GovpayWebhookPaymentService ? :payment : :refund }
+  let(:resource_type) { service_class == DefraRubyGovpay::WebhookPaymentService ? :payment : :refund }
 
   let(:fixture_file) do
     if resource_type == :payment
@@ -99,7 +99,7 @@ RSpec.shared_examples "an invalid transition" do |old_status, new_status|
   it "rejects transition from #{old_status} to #{new_status}" do
     update_webhook_status(new_status)
     expect { service_class.run(webhook_body, previous_status: old_status) }.to raise_error(
-      DefraRubyGovpay::GovpayWebhookBaseService::InvalidGovpayStatusTransition,
+      DefraRubyGovpay::WebhookBaseService::InvalidStatusTransition,
       /Invalid .* status transition from #{old_status} to #{new_status}/
     )
   end

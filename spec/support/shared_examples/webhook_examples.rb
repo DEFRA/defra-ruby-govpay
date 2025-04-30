@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-RSpec.shared_examples "govpay webhook data extraction" do |service_type|
+RSpec.shared_examples "webhook data extraction" do |service_type|
   describe "data extraction behavior" do
     let(:fixture_file) do
       if service_type == :payment

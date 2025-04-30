@@ -2,7 +2,7 @@
 
 require "spec_helper"
 
-RSpec.describe DefraRubyGovpay::GovpayWebhookBodyValidatorService do
+RSpec.describe DefraRubyGovpay::WebhookBodyValidatorService do
   describe ".run" do
 
     subject(:run_service) { described_class.run(body: webhook_body, signature:) }
@@ -10,10 +10,10 @@ RSpec.describe DefraRubyGovpay::GovpayWebhookBodyValidatorService do
     let(:webhook_body) { file_fixture("files/webhook_payment_update_body.json") }
     let(:valid_front_office_signature) { SecureRandom.hex(10) }
     let(:valid_back_office_signature) { SecureRandom.hex(10) }
-    let(:signature_service) { instance_double(DefraRubyGovpay::GovpayWebhookSignatureService) }
+    let(:signature_service) { instance_double(DefraRubyGovpay::WebhookSignatureService) }
 
     before do
-      allow(DefraRubyGovpay::GovpayWebhookSignatureService).to receive(:new).and_return(signature_service)
+      allow(DefraRubyGovpay::WebhookSignatureService).to receive(:new).and_return(signature_service)
       allow(signature_service).to receive(:run).and_return(
         front_office: valid_front_office_signature,
         back_office: valid_back_office_signature
@@ -22,7 +22,7 @@ RSpec.describe DefraRubyGovpay::GovpayWebhookBodyValidatorService do
 
     shared_examples "fails validation" do
       it "raises an exception" do
-        expect { run_service }.to raise_error(DefraRubyGovpay::GovpayWebhookBodyValidatorService::ValidationFailure)
+        expect { run_service }.to raise_error(DefraRubyGovpay::WebhookBodyValidatorService::ValidationFailure)
       end
     end
 

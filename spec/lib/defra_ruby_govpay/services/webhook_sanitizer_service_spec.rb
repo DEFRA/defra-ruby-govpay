@@ -3,7 +3,7 @@
 require "spec_helper"
 
 module DefraRubyGovpay
-  RSpec.describe GovpayWebhookSanitizerService do
+  RSpec.describe WebhookSanitizerService do
     describe ".call" do
       subject(:sanitize) { described_class.call(webhook_body) }
 

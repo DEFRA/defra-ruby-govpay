@@ -3,7 +3,7 @@
 require "active_support/core_ext/object/deep_dup"
 
 module DefraRubyGovpay
-  class GovpayWebhookSanitizerService
+  class WebhookSanitizerService
     def self.call(webhook_body)
       new.call(webhook_body)
     end

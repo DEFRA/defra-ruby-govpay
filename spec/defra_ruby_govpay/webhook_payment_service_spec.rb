@@ -2,9 +2,9 @@
 
 require "spec_helper"
 
-RSpec.describe DefraRubyGovpay::GovpayWebhookPaymentService do
-  it_behaves_like "govpay webhook data extraction", :payment
-  it_behaves_like "govpay status transitions", :payment
+RSpec.describe DefraRubyGovpay::WebhookPaymentService do
+  it_behaves_like "webhook data extraction", :payment
+  it_behaves_like "status transitions", :payment
 
   describe "#run" do
     let(:service) { described_class.new }

@@ -4,7 +4,7 @@ require "spec_helper"
 
 # rubocop:disable RSpec/MultipleMemoizedHelpers
 module DefraRubyGovpay
-  RSpec.describe GovpayWebhookSignatureService do
+  RSpec.describe WebhookSignatureService do
     describe ".run" do
       let(:front_office_secret) { SecureRandom.uuid }
       let(:back_office_secret) { SecureRandom.uuid }

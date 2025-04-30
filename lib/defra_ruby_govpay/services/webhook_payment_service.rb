@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module DefraRubyGovpay
-  class GovpayWebhookPaymentService < GovpayWebhookBaseService
+  class WebhookPaymentService < WebhookBaseService
 
     VALID_STATUS_TRANSITIONS = {
       "created" => %w[started submitted success failed cancelled error],

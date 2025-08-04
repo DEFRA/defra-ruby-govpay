@@ -1,11 +1,20 @@
 # Changelog
 
+## [Unreleased](https://github.com/DEFRA/defra-ruby-govpay/tree/HEAD)
+
+[Full Changelog](https://github.com/DEFRA/defra-ruby-govpay/compare/v1.0.0...HEAD)
+
+**Fixed bugs:**
+
+- Fix/ruby 3682 webhook payment not found [\#36](https://github.com/DEFRA/defra-ruby-govpay/pull/36) ([PaulDoyle-EA](https://github.com/PaulDoyle-EA))
+
 ## [v1.0.0](https://github.com/DEFRA/defra-ruby-govpay/tree/v1.0.0) (2025-04-30)
 
 [Full Changelog](https://github.com/DEFRA/defra-ruby-govpay/compare/v0.2.8...v1.0.0)
 
 **Merged pull requests:**
 
+- Version 1.0.0 - Major release for renamed webhook services [\#35](https://github.com/DEFRA/defra-ruby-govpay/pull/35) ([jjromeo](https://github.com/jjromeo))
 - \[RUBY-3757\] Refactor webhook handling services in Govpay gem [\#34](https://github.com/DEFRA/defra-ruby-govpay/pull/34) ([jjromeo](https://github.com/jjromeo))
 
 ## [v0.2.8](https://github.com/DEFRA/defra-ruby-govpay/tree/v0.2.8) (2025-04-29)

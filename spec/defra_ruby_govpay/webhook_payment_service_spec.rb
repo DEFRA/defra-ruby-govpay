@@ -80,20 +80,21 @@ RSpec.describe DefraRubyGovpay::WebhookPaymentService do
 
     describe "status transition validation" do
       it_behaves_like "valid and invalid transitions", "created",
-                      %w[started submitted success failed cancelled error],
+                      %w[started submitted success failed cancelled expired error],
                       []
 
       it_behaves_like "valid and invalid transitions", "started",
-                      %w[submitted success failed cancelled error],
+                      %w[submitted success failed cancelled expired error],
                       %w[created]
 
       it_behaves_like "valid and invalid transitions", "submitted",
-                      %w[success failed cancelled error],
+                      %w[success failed cancelled expired error],
                       %w[created started]
 
       it_behaves_like "no valid transitions", "success"
       it_behaves_like "no valid transitions", "failed"
       it_behaves_like "no valid transitions", "cancelled"
+      it_behaves_like "no valid transitions", "expired"
       it_behaves_like "no valid transitions", "error"
     end
   end

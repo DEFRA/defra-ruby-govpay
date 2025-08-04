@@ -4,9 +4,9 @@ module DefraRubyGovpay
   class WebhookPaymentService < WebhookBaseService
 
     VALID_STATUS_TRANSITIONS = {
-      "created" => %w[started submitted success failed cancelled error],
-      "started" => %w[submitted success failed cancelled error],
-      "submitted" => %w[success failed cancelled error],
+      "created" => %w[started submitted success failed cancelled expired error],
+      "started" => %w[submitted success failed cancelled expired error],
+      "submitted" => %w[success failed cancelled expired error],
       "success" => %w[],
       "failed" => %w[],
       "cancelled" => %w[],

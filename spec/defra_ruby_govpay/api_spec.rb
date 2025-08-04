@@ -85,11 +85,11 @@ RSpec.describe DefraRubyGovpay::API do
         )
 
         # Avoid cluttering unit test output
-        DefraRubyGovpay.logger = Logger.new("/dev/null")
+        DefraRubyGovpay.logger = Logger.new(File::NULL)
         allow(logger).to receive(:error).with(any_args).and_call_original
       end
 
-      # rubocop:disable RSpec/ExampleLength:
+      # rubocop:disable RSpec/ExampleLength
       it "logs the error response details" do
         govpay_service.send_request(method: :get, path: "/valid_path", params: { valid: "params", moto: false })
       rescue DefraRubyGovpay::GovpayApiError
@@ -99,7 +99,7 @@ RSpec.describe DefraRubyGovpay::API do
           expect(logger).to have_received(:error).with(/description.*Invalid attribute/)
         end
       end
-      # rubocop:enable RSpec/ExampleLength:
+      # rubocop:enable RSpec/ExampleLength
     end
   end
 end

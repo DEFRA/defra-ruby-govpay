@@ -31,7 +31,7 @@ module DefraRubyGovpay
       else
         DefraRubyGovpay.logger.warn(
           "Status \"#{@previous_status}\" unchanged in #{payment_or_refund_str} webhook update " \
-          "#{log_webhook_context}"
+          "#{log_webhook_context} "
         )
       end
 

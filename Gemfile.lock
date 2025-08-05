@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    defra_ruby_govpay (1.0.0)
+    defra_ruby_govpay (1.0.1)
       rest-client (~> 2.1)
 
 GEM

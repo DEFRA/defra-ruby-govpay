@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require "active_support/core_ext/object/blank"
+require "active_support/core_ext/hash/keys"
 
 module DefraRubyGovpay
   class WebhookBaseService
@@ -15,12 +16,8 @@ module DefraRubyGovpay
       new.run(webhook_body, previous_status: previous_status)
     end
 
-    def initialize
-      # No initialization needed
-    end
-
     def run(webhook_body, previous_status: nil)
-      @webhook_body = webhook_body
+      @webhook_body = webhook_body.deep_symbolize_keys
       @previous_status = previous_status
 
       validate_webhook_body
@@ -35,7 +32,6 @@ module DefraRubyGovpay
         )
       end
 
-      # Extract and return data from webhook
       extract_data_from_webhook
     end
 
@@ -51,10 +47,26 @@ module DefraRubyGovpay
 
     def extract_data_from_webhook
       {
-        id: webhook_payment_or_refund_id,
+        id: webhook_payment_id,
         status: webhook_payment_or_refund_status,
         webhook_body: webhook_body
       }
+    end
+
+    def webhook_payment_id
+      @webhook_payment_id ||= webhook_body[:resource_id]
+    end
+
+    def log_webhook_context
+      " for payment #{webhook_payment_id}"
+    end
+
+    def webhook_payment_or_refund_status
+      @webhook_payment_or_refund_status ||= webhook_body.dig(:resource, :state, :status)
+    end
+
+    def webhook_resource_type
+      @webhook_resource_type ||= webhook_body[:resource_type]&.downcase
     end
 
     # The following methods must be implemented in subclasses
@@ -63,18 +75,6 @@ module DefraRubyGovpay
     end
 
     def validate_webhook_body
-      raise NotImplementedError
-    end
-
-    def webhook_payment_or_refund_id
-      raise NotImplementedError
-    end
-
-    def webhook_payment_or_refund_status
-      raise NotImplementedError
-    end
-
-    def log_webhook_context
       raise NotImplementedError
     end
   end

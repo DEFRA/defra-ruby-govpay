@@ -4,7 +4,7 @@ module DefraRubyGovpay
   class WebhookRefundService < WebhookBaseService
 
     VALID_STATUS_TRANSITIONS = {
-      "submitted" => %w[success],
+      "submitted" => %w[success error],
       "success" => %w[],
       "error" => %w[]
     }.freeze
@@ -16,35 +16,16 @@ module DefraRubyGovpay
     end
 
     def validate_webhook_body
-      return if webhook_payment_or_refund_id.present? && webhook_payment_or_refund_status.present?
+      return if webhook_body[:event_type] == "card_payment_refunded" &&
+                webhook_payment_id.present? &&
+                webhook_refund_status.present?
 
-      raise ArgumentError, "Invalid refund webhook: #{webhook_body}"
+      raise ArgumentError, "Invalid refund webhook: #{WebhookSanitizerService.call(webhook_body)}"
     end
 
-    def webhook_payment_id
-      @webhook_payment_id ||= webhook_body["payment_id"]
+    def webhook_refund_status
+      @webhook_refund_status ||= webhook_body.dig(:resource, :state, :status)
     end
 
-    def webhook_payment_or_refund_id
-      @webhook_payment_or_refund_id ||= webhook_body["refund_id"]
-    end
-
-    def webhook_payment_or_refund_status
-      @webhook_payment_or_refund_status ||= webhook_body["status"]
-    end
-
-    def extract_data_from_webhook
-      data = super
-
-      data.merge!(
-        payment_id: webhook_payment_id
-      )
-
-      data
-    end
-
-    def log_webhook_context
-      "for refund #{webhook_payment_or_refund_id}"
-    end
   end
 end

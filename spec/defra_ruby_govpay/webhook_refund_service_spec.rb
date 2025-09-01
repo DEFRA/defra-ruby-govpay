@@ -16,30 +16,31 @@ RSpec.describe DefraRubyGovpay::WebhookRefundService do
 
       it "extracts basic refund information" do
         expect(result).to include(
-          id: "345",
+          id: webhook_body["resource_id"],
           status: "success"
         )
       end
     end
 
     context "with invalid webhook" do
-      before do
-        webhook_body.delete("refund_id")
-      end
+      before { webhook_body.delete("resource_id") }
 
       it "raises an ArgumentError" do
-        expect { service.run(webhook_body) }.to raise_error(
-          ArgumentError,
-          /Invalid refund webhook/
-        )
+        expect { service.run(webhook_body) }.to raise_error(ArgumentError, /Invalid refund webhook/)
+      end
+    end
+
+    context "with a non-refund event_type" do
+      before { webhook_body["event_type"] = "card_payment_succeeded" }
+
+      it "raises an ArgumentError" do
+        expect { service.run(webhook_body) }.to raise_error(ArgumentError, /Invalid refund webhook/)
       end
     end
 
     describe "status transition validation" do
-      it_behaves_like "valid and invalid transitions", "submitted",
-                      %w[success],
-                      %w[error]
-
+      it_behaves_like "a valid transition", "submitted", "success"
+      it_behaves_like "a valid transition", "submitted", "error"
       it_behaves_like "no valid transitions", "success"
       it_behaves_like "no valid transitions", "error"
     end

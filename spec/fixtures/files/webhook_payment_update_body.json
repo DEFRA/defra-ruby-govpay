@@ -1,29 +1,23 @@
 {
-    "webhook_message_id": "123abc",
-    "api_version": 1,
-    "created_date": "2019-07-11T10:36:26.988Z",
-    "resource_id": "hu20sqlact5260q2nanm0q8u93",
-    "resource_type": "payment",
-    "event_type": "card_payment_captured",
-    "resource": {
-      "amount": 5000,
-      "description": "Pay your council tax",
-      "reference": "12345",
-      "language": "en",
+  "webhook_message_id": "ap72p42litualag0bjna2jsu1h",
+  "created_date": "2025-08-24T12:23:44.090Z",
+  "resource_id": "hu20sqlact5260q2nanm0q8u93",
+  "api_version": 1,
+  "resource_type": "PAYMENT",
+  "event_type": "card_payment_captured",
+  "resource": {
+      "moto": false,
       "email": "sherlock.holmes@example.com",
       "state": {
-        "status": "submitted",
-        "finished": false
+          "status": "submitted",
+          "finished": false
       },
+      "amount": 47600,
+      "language": "en",
+      "reference": "1c9229b1-ee51-4235-a31a-e8d5f35de0cc",
       "payment_id": "hu20sqlact5260q2nanm0q8u93",
-      "payment_provider": "stripe",
-      "created_date": "2021-10-19T10:05:45.454Z",
-      "refund_summary": {
-        "status": "pending",
-        "amount_available": 5000,
-        "amount_submitted": 0
-      },
-      "settlement_summary": {},
+      "return_url": "https://wex.example.com/pYxcL37o4XvgvkbLAkiyXPwg/govpay/payment_callback/1c9229b1-ee51-4235-a31a-e8d5f35de0cc",
+      "description": "Your Waste Exemptions Registration WEX470222",
       "card_details": {
         "last_digits_card_number": "1234",
         "first_digits_card_number": "123456",
@@ -39,9 +33,22 @@
         "card_brand": "Visa",
         "card_type": "debit"
       },
+      "created_date": "2025-08-24T12:22:45.684Z",
+      "refund_summary": {
+          "status": "available",
+          "amount_available": 47600,
+          "amount_submitted": 0
+      },
       "delayed_capture": false,
-      "moto": false,
-      "provider_id": "10987654321",
-      "return_url": "https://your.service.gov.uk/completed"
-    }
+      "payment_provider": "sandbox",
+      "settlement_summary": {
+          "captured_date": "2025-08-24",
+          "capture_submit_time": "2025-08-24T12:23:44.090Z"
+      },
+      "authorisation_summary": {
+          "three_d_secure": {
+              "required": false
+          }
+      }
   }
+}

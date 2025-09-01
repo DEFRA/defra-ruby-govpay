@@ -24,23 +24,7 @@ module DefraRubyGovpay
 
       return unless webhook_payment_or_refund_status.blank?
 
-      raise ArgumentError, "Webhook body missing payment status: #{webhook_body}"
-    end
-
-    def webhook_resource_type
-      @webhook_resource_type ||= webhook_body["resource_type"]&.downcase
-    end
-
-    def webhook_payment_or_refund_id
-      @webhook_payment_or_refund_id ||= webhook_body.dig("resource", "payment_id")
-    end
-
-    def webhook_payment_or_refund_status
-      @webhook_payment_or_refund_status ||= webhook_body.dig("resource", "state", "status")
-    end
-
-    def log_webhook_context
-      "for payment #{webhook_payment_or_refund_id}"
+      raise ArgumentError, "Webhook body missing payment status: #{WebhookSanitizerService.call(webhook_body)}"
     end
   end
 end

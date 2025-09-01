@@ -1,5 +1,25 @@
 # Changelog
 
+## [Unreleased](https://github.com/DEFRA/defra-ruby-govpay/tree/HEAD)
+
+[Full Changelog](https://github.com/DEFRA/defra-ruby-govpay/compare/v1.0.2...HEAD)
+
+**Fixed bugs:**
+
+- Fix/ruby 3931 refund callbacks [\#45](https://github.com/DEFRA/defra-ruby-govpay/pull/45) ([PaulDoyle-EA](https://github.com/PaulDoyle-EA))
+
+**Merged pull requests:**
+
+- Bump rubocop-rspec from 3.6.0 to 3.7.0 [\#46](https://github.com/DEFRA/defra-ruby-govpay/pull/46) ([dependabot[bot]](https://github.com/apps/dependabot))
+
+## [v1.0.2](https://github.com/DEFRA/defra-ruby-govpay/tree/v1.0.2) (2025-08-06)
+
+[Full Changelog](https://github.com/DEFRA/defra-ruby-govpay/compare/v1.0.1...v1.0.2)
+
+**Fixed bugs:**
+
+- Fix/exclude gem file [\#42](https://github.com/DEFRA/defra-ruby-govpay/pull/42) ([PaulDoyle-EA](https://github.com/PaulDoyle-EA))
+
 ## [v1.0.1](https://github.com/DEFRA/defra-ruby-govpay/tree/v1.0.1) (2025-08-05)
 
 [Full Changelog](https://github.com/DEFRA/defra-ruby-govpay/compare/v1.0.0...v1.0.1)

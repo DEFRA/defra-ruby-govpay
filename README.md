@@ -98,12 +98,13 @@ result = DefraRubyGovpay::WebhookRefundService.run(webhook_body)
 
 ### Validating Webhook Signatures
 
-To validate the signature of a webhook, use the `CallbackValidator` class:
+The `WebhookSignatureService` service returns two HMAC hexdigests for the webhook body, one created using the front-office signature and one using the back-office signature. This is necessary because both MOTO and non-MOTO payment webhooks are processed by the front-office, as the back-office is inaccessible to GOV.UK Pay. 
+
+To validate the signature of a webhook, use the `WebhookBodyValidatorService` class:
 
 ```ruby
-valid = DefraRubyGovpay::CallbackValidator.call(
-  request_body,
-  ENV['GOVPAY_WEBHOOK_SIGNING_SECRET'],
+valid = DefraRubyGovpay::WebhookBodyValidatorService.call(
+  body: webhook_body,
   request.headers['Pay-Signature']
 )
 
@@ -116,10 +117,10 @@ end
 
 ### Payment vs Refund Webhooks
 
-The gem can handle both payment and refund webhooks:
+The gem can handle both payment and refund webhooks. Both have a top-level `resource_id` which refers to the relevant payment. There is no distinct identifier for a refund. Note that `resource_type` is "PAYMENT" for both payment and refund webhoks. The `event_type` indicates whether the webhook is for a payment or a refund:
 
-- **Payment Webhooks**: These have a `resource_type` of "payment" and contain payment status information in `resource.state.status`.
-- **Refund Webhooks**: These have a `refund_id` field and contain refund status information in the `status` field.
+- **Payment webhook**: `card_payment_succeeded` (for example)
+- **Refund webhook**: `card_payment_refunded`
 
 The appropriate service class will be used based on the webhook type:
 

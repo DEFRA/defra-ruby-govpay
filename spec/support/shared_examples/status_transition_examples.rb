@@ -1,5 +1,9 @@
 # frozen_string_literal: true
 
+def update_webhook_status(status)
+  webhook_body["resource"]["state"]["status"] = status
+end
+
 RSpec.shared_examples "status transitions" do
   let(:service_class) { described_class }
   let(:resource_type) { service_class == DefraRubyGovpay::WebhookPaymentService ? :payment : :refund }
@@ -13,14 +17,6 @@ RSpec.shared_examples "status transitions" do
   end
 
   let(:webhook_body) { JSON.parse(fixture_file) }
-
-  def update_webhook_status(status)
-    if resource_type == :payment
-      webhook_body["resource"]["state"]["status"] = status
-    else
-      webhook_body["status"] = status
-    end
-  end
 
   describe "status transition validation" do
     context "when status hasn't changed" do
@@ -60,14 +56,6 @@ RSpec.shared_examples "a valid transition" do |old_status, new_status|
 
   let(:webhook_body) { JSON.parse(fixture_file) }
 
-  def update_webhook_status(status)
-    if resource_type == :payment
-      webhook_body["resource"]["state"]["status"] = status
-    else
-      webhook_body["status"] = status
-    end
-  end
-
   it "allows transition from #{old_status} to #{new_status}" do
     update_webhook_status(new_status)
     expect { service_class.run(webhook_body, previous_status: old_status) }.not_to raise_error
@@ -88,16 +76,9 @@ RSpec.shared_examples "an invalid transition" do |old_status, new_status|
 
   let(:webhook_body) { JSON.parse(fixture_file) }
 
-  def update_webhook_status(status)
-    if resource_type == :payment
-      webhook_body["resource"]["state"]["status"] = status
-    else
-      webhook_body["status"] = status
-    end
-  end
-
   it "rejects transition from #{old_status} to #{new_status}" do
     update_webhook_status(new_status)
+
     expect { service_class.run(webhook_body, previous_status: old_status) }.to raise_error(
       DefraRubyGovpay::WebhookBaseService::InvalidStatusTransition,
       /Invalid .* status transition from #{old_status} to #{new_status}/
@@ -105,19 +86,8 @@ RSpec.shared_examples "an invalid transition" do |old_status, new_status|
   end
 end
 
-RSpec.shared_examples "valid and invalid transitions" do |old_status, valid_statuses, invalid_statuses = []|
-  context "with previous status '#{old_status}'" do
-    valid_statuses.each do |new_status|
-      it_behaves_like "a valid transition", old_status, new_status
-    end
-
-    invalid_statuses.each do |new_status|
-      it_behaves_like "an invalid transition", old_status, new_status
-    end
-  end
-end
-
 RSpec.shared_examples "no valid transitions" do |old_status|
-  all_statuses = %w[created started submitted success failed cancelled error]
-  it_behaves_like "valid and invalid transitions", old_status, [], all_statuses - [old_status]
+  %w[created started submitted success failed cancelled error].each do |new_status|
+    it_behaves_like "an invalid transition", old_status, new_status unless new_status == old_status
+  end
 end

@@ -70,7 +70,7 @@ RSpec.describe DefraRubyGovpay::WebhookPaymentService do
           webhook_body["resource_type"] = resource_type_value
         end
 
-        it_behaves_like "valid and invalid transitions", "created", %w[started submitted success failed cancelled error], []
+        it { expect { service.run(webhook_body) }.not_to raise_error }
       end
 
       %w[payment PAYMENT].each do |case_variant|
@@ -79,18 +79,26 @@ RSpec.describe DefraRubyGovpay::WebhookPaymentService do
     end
 
     describe "status transition validation" do
-      it_behaves_like "valid and invalid transitions", "created",
-                      %w[started submitted success failed cancelled expired error],
-                      []
+      # created
+      %w[started submitted success failed cancelled expired error].each do |new_status|
+        it_behaves_like "a valid transition", "created", new_status
+      end
 
-      it_behaves_like "valid and invalid transitions", "started",
-                      %w[submitted success failed cancelled expired error],
-                      %w[created]
+      # started
+      %w[submitted success failed cancelled expired error].each do |new_status|
+        it_behaves_like "a valid transition", "started", new_status
+      end
+      it_behaves_like "an invalid transition", "started", "created"
 
-      it_behaves_like "valid and invalid transitions", "submitted",
-                      %w[success failed cancelled expired error],
-                      %w[created started]
+      # submitted
+      %w[success failed cancelled expired error].each do |new_status|
+        it_behaves_like "a valid transition", "submitted", new_status
+      end
+      %w[created started].each do |new_status|
+        it_behaves_like "an invalid transition", "submitted", new_status
+      end
 
+      # end states
       it_behaves_like "no valid transitions", "success"
       it_behaves_like "no valid transitions", "failed"
       it_behaves_like "no valid transitions", "cancelled"
